@@ -1,0 +1,64 @@
+@theme {
+  --font-display: "Grenze Gotisch", serif;
+  --font-sans: "Noto Sans", sans-serif;
+  --font-serif: "Noto Sans serif", serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-noto-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply mb-4;
+  }
+
+  h1 {
+    font-size: clamp(2.25rem, 5vw + 1rem, 4rem);
+  }
+
+  h2 {
+    font-size: clamp(1.875rem, 4vw + 0.5rem, 3rem);
+  }
+
+  h3 {
+    font-size: clamp(1.5rem, 3.5vw + 0.25rem, 2.25rem);
+  }
+
+  h4 {
+    font-size: clamp(1.25rem, 3vw + 0.25rem, 1.875rem);
+  }
+
+  h5 {
+    font-size: clamp(1.125rem, 2vw + 0.25rem, 1.5rem);
+  }
+
+  h6 {
+    font-size: clamp(1rem, 1.5vw + 0.25rem, 1.25rem);
+  }
+
+  p {
+    @apply mb-4 leading-relaxed;
+    font-size: clamp(1rem, 1.2vw + 0.25rem, 1.125rem);
+  }
+}
+
+.grenze-gotisch--display {
+  font-family: "Grenze Gotisch", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.noto-serif--display {
+  font-family: "Noto Serif", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}

@@ -1,0 +1,29 @@
+@theme {
+  --color-cadet-gray: #95afba;
+  --color-azul: #296eb4;
+  --color-photo-blue: #a8dadc;
+  --color-cerulean: #457b9d;
+  --color-red-pantone: #e63946;
+  --color-berkeley-blue: #1d3557;
+  --color-steel-blue: #1982c4;
+  --color-naples-yellow: #ffba49;
+  --color-raisin-black: #1d1e2c;
+
+  --color-pen-blue: #041754;
+}
+
+@layer theme {
+  @media (prefers-color-scheme: light) {
+    html {
+      background-color: #f9fafb;
+      color: var(--pen-blue);
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html {
+      background-color: var(--color-raisin-black);
+      color: white;
+    }
+  }
+}
