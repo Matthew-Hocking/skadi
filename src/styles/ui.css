@@ -1,0 +1,7 @@
+@layer base {
+  /* Landing page auth CTAs */
+  button.sign-in,
+  button.sign-up {
+    @apply hover:cursor-pointer;
+  }
+}

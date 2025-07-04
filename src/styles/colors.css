@@ -1,18 +1,42 @@
 @theme {
+  /* Primary Colors - Refined */
   --color-cadet-gray: #95afba;
+  --color-cadet-gray-hover: #7a9aa8;
+  
   --color-azul: #296eb4;
+  --color-azul-hover: #1e5a9a;
+  
   --color-photo-blue: #a8dadc;
+  --color-photo-blue-hover: #8bc5c9;
+  
   --color-cerulean: #457b9d;
+  --color-cerulean-hover: #356287;
+  
   --color-red-pantone: #e63946;
+  --color-red-pantone-hover: #d32f2f;
+  
   --color-berkeley-blue: #1d3557;
+  --color-berkeley-blue-hover: #152740;
+  
   --color-steel-blue: #1982c4;
+  --color-steel-blue-hover: #146ba3;
+  
   --color-naples-yellow: #ffba49;
+  --color-naples-yellow-hover: #ff9f1c;
+  
   --color-raisin-black: #1d1e2c;
+  --color-raisin-black-hover: #0f1017;
+  
+  /* Additional suggested colors */
+  --color-mint-cream: #f1faee;
+  --color-mint-cream-hover: #e6f5e1;
+  
+  --color-light-gray: #f8f9fa;
+  --color-light-gray-hover: #e9ecef;
 
-  --color-pen-blue: #041754;
 }
 
-@layer theme {
+/* @layer theme {
   @media (prefers-color-scheme: light) {
     html {
       background-color: #f9fafb;
@@ -25,5 +49,11 @@
       background-color: var(--color-raisin-black);
       color: white;
     }
+  }
+} */
+
+@layer theme {
+  html {
+    background-color: #f9fafb;
   }
 }
