@@ -8,11 +8,8 @@ export function useAuth() {
 
   useEffect(() => {
     const getSession = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error('Error fetching user:', error.message);
-      }
-      setUser(data?.user ?? null);
+      const { data } = await supabase.auth.getSession();
+      setUser(data?.session?.user ?? null);
       setLoading(false);
     };
 
