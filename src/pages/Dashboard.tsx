@@ -6,36 +6,29 @@ import { Sidebar, AddListModal } from "../components/dashboard";
 function Dashboard() {
   const [selectedListId, setSelectedListId] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [listRefreshKey, setListRefreshKey] = useState(0);
-
-  const handleAddNewList = () => {
-    setShowAddModal(true);
-  };
-
-  const handleListCreated = () => {
-    setListRefreshKey((k) => k + 1); // bump key to trigger refetch
-  };
+  const [refreshAfterCreate, setRefreshAfterCreate] = useState<() => void>(() => () => {});
 
   return (
     <div class="flex h-screen">
       <Sidebar
         selectedListId={selectedListId}
         onSelect={setSelectedListId}
-        onAddNewClick={handleAddNewList}
-        refreshKey={listRefreshKey}
+        onAddNewClick={(refreshFn) => {
+          setRefreshAfterCreate(() => refreshFn);
+          setShowAddModal(true);
+        }}
       />
 
       <main class="flex-1 overflow-y-auto p-6">
         <h1 class="text-2xl font-bold mb-4">
           {selectedListId ? `List: ${selectedListId}` : "Select a job list"}
         </h1>
-        {/* Job items for selected list will go here */}
       </main>
 
       {showAddModal && (
         <AddListModal
           onClose={() => setShowAddModal(false)}
-          onCreated={handleListCreated}
+          onCreated={refreshAfterCreate}
         />
       )}
     </div>

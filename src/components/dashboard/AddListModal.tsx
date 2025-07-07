@@ -3,7 +3,7 @@ import { supabase } from '../../lib/supabase';
 
 type AddListModalProps = {
   onClose: () => void;
-  onCreated: () => void; // triggers a refetch in Sidebar
+  onCreated: () => void;
 };
 
 export default function AddListModal({ onClose, onCreated }: AddListModalProps) {
