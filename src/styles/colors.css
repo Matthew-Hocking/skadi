@@ -39,7 +39,7 @@
 
 }
 
-@layer theme {
+/* @layer theme {
   @media (prefers-color-scheme: light) {
     html {
       background-color: #f9fafb;
@@ -52,5 +52,12 @@
       background-color: var(--color-raisin-black);
       color: white;
     }
+  }
+} */
+
+@layer theme {
+  html {
+    background-color: #f9fafb;
+    color: var(--pen-blue);
   }
 }

@@ -1,26 +1,43 @@
-import { useEffect } from 'preact/hooks';
-import { useAuth } from '../hooks/useAuth';
-import { useLocation } from 'preact-iso';
+import { useEffect, useState } from "preact/hooks";
+import { useAuth } from "../hooks/useAuth";
+import { useLocation } from "preact-iso";
+import { Sidebar, AddListModal } from "../components/dashboard";
 
 function Dashboard() {
-  const { logout } = useAuth();
-  const { route } = useLocation();
+  const [selectedListId, setSelectedListId] = useState<string | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [listRefreshKey, setListRefreshKey] = useState(0);
 
-  const handleLogout = async () => {
-    await logout();
-    route('/');
+  const handleAddNewList = () => {
+    setShowAddModal(true);
+  };
+
+  const handleListCreated = () => {
+    setListRefreshKey((k) => k + 1); // bump key to trigger refetch
   };
 
   return (
-    <div class="p-6">
-      <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
+    <div class="flex h-screen">
+      <Sidebar
+        selectedListId={selectedListId}
+        onSelect={setSelectedListId}
+        onAddNewClick={handleAddNewList}
+        refreshKey={listRefreshKey}
+      />
 
-      <button
-        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
-        onClick={handleLogout}
-      >
-        Sign Out
-      </button>
+      <main class="flex-1 overflow-y-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">
+          {selectedListId ? `List: ${selectedListId}` : "Select a job list"}
+        </h1>
+        {/* Job items for selected list will go here */}
+      </main>
+
+      {showAddModal && (
+        <AddListModal
+          onClose={() => setShowAddModal(false)}
+          onCreated={handleListCreated}
+        />
+      )}
     </div>
   );
 }
@@ -30,7 +47,7 @@ export default function ProtectedDashboard() {
   const { route } = useLocation();
 
   useEffect(() => {
-    if (!loading && !user) route('/');
+    if (!loading && !user) route("/");
   }, [user, loading]);
 
   if (loading) return <div>Loading...</div>;

@@ -9,7 +9,7 @@ const Nav = ({ onSignInClick, onSignUpClick }: NavProps) => {
       <nav class="container flex items-center justify-between py-4">
         <a
           href="#top"
-          class="text-5xl font-light text-azul dark:text-mint-cream"
+          class="text-5xl font-light text-azul"
         >
           <span class="underline-hover josefin-sans-display">Skadi</span>
         </a>
@@ -19,15 +19,15 @@ const Nav = ({ onSignInClick, onSignUpClick }: NavProps) => {
           role="navigation"
         ></ul>
 
-        <div class="flex gap-4 whitespace-nowrap dark:text-mint-cream">
+        <div class="flex gap-4 whitespace-nowrap">
           <button
-            class="text-azul hover:text-azul-hover transition underline-hover py-4 px-10 dark:text-mint-cream dark:hover:text-mint-cream"
+            class="text-azul hover:text-azul-hover transition underline-hover py-4 px-10 "
             onClick={onSignInClick}
           >
             Sign in
           </button>
           <button
-            class="text-white py-4 px-10 bg-azul hover:bg-azul-hover transition duration-[0.3s] ease-in-out dark:raisin-black"
+            class="text-white py-4 px-10 bg-azul hover:bg-azul-hover transition duration-[0.3s] ease-in-out"
             onClick={onSignUpClick}
           >
             Sign up
