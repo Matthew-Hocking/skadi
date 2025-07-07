@@ -1,0 +1,20 @@
+@layer components {
+  .underline-hover {
+    @apply relative inline-block cursor-pointer;
+  }
+
+  .underline-hover::after {
+    content: '';
+    @apply absolute left-0 bottom-0 h-[4px] w-full bg-azul
+    dark:bg-mint-cream;
+
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .underline-hover:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}

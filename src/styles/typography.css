@@ -1,12 +1,15 @@
 @theme {
-  --font-display: "Grenze Gotisch", serif;
+  /* --font-display: "Grenze Gotisch", serif;
   --font-sans: "Noto Sans", sans-serif;
-  --font-serif: "Noto Sans serif", serif;
+  --font-serif: "Noto Sans serif", serif; */
+
+  --font-sans: "Josefin Sans", sans-serif;
+  --font-ui: "Inter", sans-serif;
 }
 
 @layer base {
   html {
-    font-family: var(--font-sans);
+    font-family: var(--font-ui);
   }
 
   h1,
@@ -15,7 +18,9 @@
   h4,
   h5,
   h6 {
-    @apply mb-4;
+    @apply mb-4
+    font-sans
+    leading-none;
   }
 
   h1 {
@@ -48,7 +53,7 @@
   }
 }
 
-.grenze-gotisch--display {
+/* .grenze-gotisch--display {
   font-family: "Grenze Gotisch", serif;
   font-optical-sizing: auto;
   font-weight: 500;
@@ -61,4 +66,11 @@
   font-weight: 500;
   font-style: normal;
   font-variation-settings: "wdth" 100;
+} */
+
+.josefin-sans-display {
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
 }

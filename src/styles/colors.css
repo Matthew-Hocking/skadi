@@ -34,9 +34,12 @@
   --color-light-gray: #f8f9fa;
   --color-light-gray-hover: #e9ecef;
 
+  --color-space-cadet: #152046ff;
+  --color-copper: #b38144ff;
+
 }
 
-/* @layer theme {
+@layer theme {
   @media (prefers-color-scheme: light) {
     html {
       background-color: #f9fafb;
@@ -49,11 +52,5 @@
       background-color: var(--color-raisin-black);
       color: white;
     }
-  }
-} */
-
-@layer theme {
-  html {
-    background-color: #f9fafb;
   }
 }
