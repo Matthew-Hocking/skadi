@@ -19,7 +19,7 @@ function Dashboard() {
         }}
       />
 
-      <main class="flex-1 overflow-y-auto p-6">
+      <main class="flex-1 overflow-y-auto">
         {!selectedListId ? (
           <p class="text-gray-500">Select a job list to get started.</p>
         ) : (

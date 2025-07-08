@@ -103,7 +103,7 @@ export default function Sidebar({
 
   return (
     <aside
-      class="w-[260px] shrink-0 border-r border-gray-300 h-full flex flex-col bg-white"
+      class="w-[260px] shrink-0 h-full flex flex-col bg-white"
       role="complementary"
       aria-label="Job lists sidebar"
     >
