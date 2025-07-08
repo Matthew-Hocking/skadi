@@ -6,12 +6,12 @@ type NavProps = {
 const Nav = ({ onSignInClick, onSignUpClick }: NavProps) => {
   return (
     <header>
-      <nav class="container flex items-center justify-between py-4">
+      <nav class="container flex items-center justify-between py-4 mt-2 ">
         <a
           href="#top"
-          class="text-5xl font-light text-azul"
+          class="text-3xl md:text-5xl grenze-gotisch-display"
         >
-          <span class="underline-hover josefin-sans-display">Skadi</span>
+          Skadi
         </a>
 
         <ul
@@ -21,13 +21,13 @@ const Nav = ({ onSignInClick, onSignUpClick }: NavProps) => {
 
         <div class="flex gap-4 whitespace-nowrap">
           <button
-            class="text-azul hover:text-azul-hover transition underline-hover py-4 px-10 "
+            class=""
             onClick={onSignInClick}
           >
-            Sign in
+            Log in
           </button>
           <button
-            class="text-white py-4 px-10 bg-azul hover:bg-azul-hover transition duration-[0.3s] ease-in-out"
+            class=""
             onClick={onSignUpClick}
           >
             Sign up

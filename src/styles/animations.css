@@ -9,7 +9,7 @@
 
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.2s ease-in-out;
   }
 
   .underline-hover:hover::after {

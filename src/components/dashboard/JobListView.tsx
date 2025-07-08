@@ -10,37 +10,61 @@ type JobItem = {
   created_at: string;
 };
 
+type JobStatus = {
+  id: string;
+  title: string;
+  order: number;
+  created_at: string;
+}
+
 type JobListViewProps = {
   listId: string;
 };
 
 export default function JobListView({ listId }: JobListViewProps) {
   const [items, setItems] = useState<JobItem[]>([]);
+  const [jobStatuses, setJobStatuses] = useState<JobStatus[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!listId) return;
 
-    const fetchItems = async () => {
+    const fetchData = async () => {
       setLoading(true);
 
-      const { data, error } = await supabase
-        .from('job_item')
-        .select('*')
-        .eq('job_list_id', listId)
-        .order('created_at', { ascending: false });
+      const [jobItemsResponse, jobStatusResponse] = await Promise.all([
+        supabase
+          .from('job_item')
+          .select('*')
+          .eq('list_id', listId)
+          .order('created_at', { ascending: false }),
+        
+        supabase
+          .from('job_status')
+          .select('*')
+          .eq('job_list_id', listId)
+          .order('order', { ascending: true })
+      ]);
 
-      if (error) {
-        console.error('Error fetching job items:', error.message);
+      if (jobItemsResponse.error) {
+        console.error('Error fetching job items:', jobItemsResponse.error.message);
       } else {
-        setItems(data ?? []);
+        setItems(jobItemsResponse.data ?? []);
+      }
+
+      if (jobStatusResponse.error) {
+        console.error('Error fetching job statuses:', jobStatusResponse.error.message);
+      } else {
+        setJobStatuses(jobStatusResponse.data ?? []);
       }
 
       setLoading(false);
     };
 
-    fetchItems();
+    fetchData();
   }, [listId]);
+
+  console.log(items, jobStatuses);
 
   return (
     <div>

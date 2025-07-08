@@ -1,9 +1,5 @@
 @theme {
-  /* --font-display: "Grenze Gotisch", serif;
-  --font-sans: "Noto Sans", sans-serif;
-  --font-serif: "Noto Sans serif", serif; */
-
-  --font-sans: "Josefin Sans", sans-serif;
+  --font-logotype: "Grenze Gotisch", serif;
   --font-ui: "Inter", sans-serif;
 }
 
@@ -53,25 +49,9 @@
   }
 }
 
-/* .grenze-gotisch--display {
+.grenze-gotisch-display {
   font-family: "Grenze Gotisch", serif;
   font-optical-sizing: auto;
-  font-weight: 500;
+  font-weight: 600;
   font-style: normal;
-}
-
-.noto-serif--display {
-  font-family: "Noto Serif", serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
-  font-variation-settings: "wdth" 100;
-} */
-
-.josefin-sans-display {
-  font-family: "Josefin Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
-  color: #296eb4;
 }

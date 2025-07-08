@@ -57,7 +57,6 @@
 
 @layer theme {
   html {
-    background-color: #f9fafb;
-    color: var(--pen-blue);
+    @apply bg-white;
   }
 }

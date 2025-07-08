@@ -107,8 +107,8 @@ export default function Sidebar({
       role="complementary"
       aria-label="Job lists sidebar"
     >
-      <div class="p-4 text-4xl">
-        <span class="josefin-sans-display px-3">Skadi</span>
+      <div class="py-4 px-7 text-5xl grenze-gotisch-display">
+        Skadi
       </div>
 
       <nav class="flex-1 overflow-y-auto p-4">
@@ -144,7 +144,7 @@ export default function Sidebar({
       <div class="p-4">
         <button
           onClick={handleLogout}
-          class="flex items-center gap-2 w-full mb-4 px-3 py-2 rounded text-red-pantone hover:bg-red-pantone/10"
+          class="flex items-center gap-2 w-full mb-4 px-3 py-2 rounded text-red-700 hover:bg-red-pantone/10"
         >
           <LogOut size={20} />
           Sign out
