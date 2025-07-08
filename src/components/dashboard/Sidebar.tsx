@@ -57,14 +57,16 @@ export default function Sidebar({
       <li
         key={list.id}
         role="option"
-        class="flex items-center justify-between group rounded hover:bg-gray-200"
+        class={`flex items-center justify-between group rounded hover:bg-gray-100 ${
+          selectedListId === list.id ? "bg-gray-100" : ""
+        }`}
       >
         <button
           onClick={() => onSelect(list.id)}
           aria-current={selectedListId === list.id ? "page" : undefined}
           aria-label={`Select job list: ${list.title}`}
           class={`flex-1 text-left text-sm py-2 px-3 ${
-            selectedListId === list.id ? "text-azul font-semibold" : ""
+            selectedListId === list.id ? "text-azul rounded font-semibold bg-gray-100" : ""
           }`}
         >
           {list.title}
@@ -101,7 +103,7 @@ export default function Sidebar({
 
   return (
     <aside
-      class="w-[260px] shrink-0 border-r border-gray-300 h-full flex flex-col"
+      class="w-[260px] shrink-0 border-r border-gray-300 h-full flex flex-col bg-white"
       role="complementary"
       aria-label="Job lists sidebar"
     >
