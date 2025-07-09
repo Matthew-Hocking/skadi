@@ -1,5 +1,5 @@
 import type { User } from '@supabase/supabase-js';
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 
 export function useAuth() {

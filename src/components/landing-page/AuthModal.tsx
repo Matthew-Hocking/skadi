@@ -1,6 +1,6 @@
-import { useState } from 'preact/hooks';
+import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { useLocation } from 'preact-iso';
+import { useNavigate } from 'react-router-dom';
 
 type AuthModalProps = {
   mode: 'signin' | 'signup';
@@ -9,7 +9,7 @@ type AuthModalProps = {
 
 export default function AuthModal({ mode, onClose }: AuthModalProps) {
   const { login, signup } = useAuth();
-  const { route } = useLocation();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,7 +41,7 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
     return true;
   };
 
-  const handleSubmit = async (e: Event) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!validateForm()) return;
@@ -63,7 +63,7 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
         setSuccess('Confirmation email sent! Please check your inbox.');
       } else {
         onClose();
-        route('/dashboard');
+        navigate('/dashboard');
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
@@ -74,70 +74,70 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
 
   return (
     <div 
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
       role="dialog"
       aria-modal="true"
       aria-labelledby="auth-modal-title"
     >
-      <div class="bg-white rounded-lg p-6 shadow-lg w-[90%] max-w-sm">
-        <h2 id="auth-modal-title" class="text-xl font-bold mb-4">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</h2>
+      <div className="bg-white rounded-lg p-6 shadow-lg w-[90%] max-w-sm">
+        <h2 id="auth-modal-title" className="text-xl font-bold mb-4">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</h2>
 
         <form onSubmit={handleSubmit} noValidate>
-          <div class="mb-3">
-            <label for="email" class="sr-only">Email address</label>
+          <div className="mb-3">
+            <label htmlFor="email" className="sr-only">Email address</label>
             <input
               id="email"
               type="email"
               placeholder="Email"
               value={email}
-              onInput={(e) => setEmail(e.currentTarget.value)}
-              class="block w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-azul"
+              onChange={(e) => setEmail(e.currentTarget.value)}
+              className="block w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-azul"
               required
               disabled={isLoading}
-              autocomplete="email"
+              autoComplete="email"
               aria-describedby={error ? "error-message" : undefined}
             />
           </div>
-          <div class="mb-4">
-            <label for="password" class="sr-only">Password</label>
+          <div className="mb-4">
+            <label htmlFor="password" className="sr-only">Password</label>
             <input
               id="password"
               type="password"
               placeholder="Password"
               value={password}
-              onInput={(e) => setPassword(e.currentTarget.value)}
-              class="block w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-azul"
+              onChange={(e) => setPassword(e.currentTarget.value)}
+              className="block w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-azul"
               required
               minLength={mode === 'signup' ? 8 : undefined}
               disabled={isLoading}
-              autocomplete={mode === 'signup' ? 'new-password' : 'current-password'}
+              autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
               aria-describedby={error ? "error-message" : undefined}
             />
           </div>
 
           {error && (
-            <p id="error-message" class="text-red-600 text-sm mb-3" role="alert" aria-live="polite">
+            <p id="error-message" className="text-red-600 text-sm mb-3" role="alert" aria-live="polite">
               {error}
             </p>
           )}
           {success && (
-            <p class="text-green-600 text-sm mb-3" role="status" aria-live="polite">
+            <p className="text-green-600 text-sm mb-3" role="status" aria-live="polite">
               {success}
             </p>
           )}
 
-          <div class="flex justify-between">
+          <div className="flex justify-between">
             <button 
               type="button" 
               onClick={onClose} 
-              class="text-sm"
+              className="text-sm"
               disabled={isLoading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="bg-azul text-white px-4 py-2 rounded disabled:opacity-50"
+              className="bg-azul text-white px-4 py-2 rounded disabled:opacity-50"
               disabled={isLoading}
             >
               {isLoading ? 'Loading...' : (mode === 'signin' ? 'Sign In' : 'Sign Up')}

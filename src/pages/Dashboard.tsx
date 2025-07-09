@@ -1,6 +1,6 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { useLocation } from "preact-iso";
+import { useNavigate } from "react-router-dom";
 import { Sidebar, AddListModal, JobListView } from "../components/dashboard";
 
 function Dashboard() {
@@ -9,7 +9,7 @@ function Dashboard() {
   const [refreshAfterCreate, setRefreshAfterCreate] = useState<() => void>(() => () => {});
 
   return (
-    <div class="flex h-screen">
+    <div className="flex h-screen">
       <Sidebar
         selectedListId={selectedListId}
         onSelect={setSelectedListId}
@@ -19,9 +19,9 @@ function Dashboard() {
         }}
       />
 
-      <main class="flex-1 overflow-y-auto">
+      <main className="flex-1 overflow-y-auto">
         {!selectedListId ? (
-          <p class="text-gray-500">Select a job list to get started.</p>
+          <p className="text-gray-500">Select a job list to get started.</p>
         ) : (
           <JobListView listId={selectedListId} />
         )}
@@ -39,10 +39,10 @@ function Dashboard() {
 
 export default function ProtectedDashboard() {
   const { user, loading } = useAuth();
-  const { route } = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !user) route("/");
+    if (!loading && !user) navigate("/");
   }, [user, loading]);
 
   if (loading) return <div>Loading...</div>;
