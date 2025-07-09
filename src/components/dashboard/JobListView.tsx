@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 
 type JobList = {
@@ -69,17 +69,17 @@ export default function JobListView({ listId }: JobListViewProps) {
     setLoading(false);
   };
 
-  if (loading) return <p class="text-gray-500">Loading...</p>;
-  if (!list) return <p class="text-red-600">Job list not found.</p>;
+  if (loading) return <p className="text-gray-500">Loading...</p>;
+  if (!list) return <p className="text-red-600">Job list not found.</p>;
 
   return (
-    <div class="h-screen flex flex-col">
-      <div class="p-4 w-full border-b-2 border-stone-200 bg-white sticky top-0 z-20">
+    <div className="h-screen flex flex-col">
+      <div className="p-4 w-full border-b-2 border-stone-200 bg-white sticky top-0 z-20">
         {list.title}
       </div>
 
-      <div class="flex-1 overflow-x-auto">
-        <div class="grid grid-flow-col auto-cols-[minmax(280px,1fr)] min-w-full border-l border-gray-200 h-full">
+      <div className="flex-1 overflow-x-auto">
+        <div className="grid grid-flow-col auto-cols-[minmax(280px,1fr)] min-w-full border-l border-gray-200 h-full">
           {jobStatuses.map((status) => {
             const cards = jobItems.filter(
               (item) => item.status_id === status.id
@@ -87,20 +87,20 @@ export default function JobListView({ listId }: JobListViewProps) {
             return (
               <div
                 key={status.id}
-                class="flex flex-col border-r border-stone-200 h-full bg-stone-50 relative overflow-y-auto"
+                className="flex flex-col border-r border-stone-200 h-full bg-stone-50 relative overflow-y-auto"
               >
-                <div class="p-4 sticky top-0 z-10 bg-stone-50 text-center">
-                  <h3 class="text-lg text-stone-500">{status.title}</h3>
+                <div className="p-4 sticky top-0 z-10 bg-stone-50 text-center">
+                  <h3 className="text-lg text-stone-500">{status.title}</h3>
                 </div>
 
-                <div class="p-4 space-y-4 flex-1">
+                <div className="p-4 space-y-4 flex-1">
                   {cards.map((item) => (
                     <div
                       key={item.id}
-                      class="bg-white border border-stone-300 rounded p-3 shadow-sm"
+                      className="bg-white border border-stone-300 rounded p-3 shadow-sm"
                     >
-                      <h4 class="font-medium">{item.title}</h4>
-                      <p class="text-sm text-gray-600">{item.company}</p>
+                      <h4 className="font-medium">{item.title}</h4>
+                      <p className="text-sm text-gray-600">{item.company}</p>
                     </div>
                   ))}
                 </div>

@@ -1,5 +1,5 @@
-import { useState } from "preact/hooks";
-import { useLocation } from "preact-iso";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthModal, Nav } from "../components/landing-page";
 import { useAuth } from "../hooks/useAuth";
 
@@ -8,10 +8,10 @@ const LandingPage = () => {
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
 
   const { user } = useAuth();
-  const { route } = useLocation()
+  const navigate = useNavigate()
 
   if (user) {
-    route('/dashboard')
+    navigate('/dashboard')
   }
 
   return (

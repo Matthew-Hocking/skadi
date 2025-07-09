@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "preact/hooks";
-import { useLocation } from "preact-iso";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
-import { LogOut, Plus, Trash2 } from "lucide-preact";
+import { LogOut, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
 type JobList = {
@@ -26,7 +26,7 @@ export default function Sidebar({
   const [refreshKey, setRefreshKey] = useState(0);
 
   const { logout } = useAuth();
-  const { route } = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLists = async () => {
@@ -49,7 +49,7 @@ export default function Sidebar({
 
   const handleLogout = async () => {
     await logout();
-    route("/");
+    navigate("/");
   };
 
   const renderedListItems = useMemo(() => {
@@ -57,7 +57,7 @@ export default function Sidebar({
       <li
         key={list.id}
         role="option"
-        class={`flex items-center justify-between group rounded hover:bg-gray-100 ${
+        className={`flex items-center justify-between group rounded hover:bg-gray-100 ${
           selectedListId === list.id ? "bg-gray-100" : ""
         }`}
       >
@@ -65,7 +65,7 @@ export default function Sidebar({
           onClick={() => onSelect(list.id)}
           aria-current={selectedListId === list.id ? "page" : undefined}
           aria-label={`Select job list: ${list.title}`}
-          class={`flex-1 text-left text-sm py-2 px-3 ${
+          className={`flex-1 text-left text-sm py-2 px-3 ${
             selectedListId === list.id ? "text-azul rounded font-semibold bg-gray-100" : ""
           }`}
         >
@@ -91,7 +91,7 @@ export default function Sidebar({
               setLists((prev) => prev.filter((l) => l.id !== list.id));
             }
           }}
-          class="text-gray-700 hover:text-red-500 px-3 py-2 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:text-red-500"
+          className="text-gray-700 hover:text-red-500 px-3 py-2 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:text-red-500"
           aria-label={`Delete list: ${list.title}`}
           title={`Delete "${list.title}"`}
         >
@@ -103,48 +103,48 @@ export default function Sidebar({
 
   return (
     <aside
-      class="w-[260px] shrink-0 h-full flex flex-col bg-white"
+      className="w-[260px] shrink-0 h-full flex flex-col bg-white"
       role="complementary"
       aria-label="Job lists sidebar"
     >
-      <div class="py-4 px-7 text-5xl grenze-gotisch-display">
+      <div className="py-4 px-7 text-5xl grenze-gotisch-display">
         Skadi
       </div>
 
-      <nav class="flex-1 overflow-y-auto p-4">
+      <nav className="flex-1 overflow-y-auto p-4">
         <button
           onClick={() => onAddNewClick(() => setRefreshKey((k) => k + 1))}
-          class="group flex items-center gap-2 w-full mb-4 px-3 py-2 rounded hover:text-azul hover:bg-azul/10"
+          className="group flex items-center gap-2 w-full mb-4 px-3 py-2 rounded hover:text-azul hover:bg-azul/10"
         >
           <Plus
             size={20}
-            class="rounded-full text-azul group-hover:bg-azul group-hover:text-white group-hover:p-1"
+            className="rounded-full text-azul group-hover:bg-azul group-hover:text-white group-hover:p-1"
           />
           New List
         </button>
         {loading ? (
           <p
-            class="text-sm text-gray-500 px-2"
+            className="text-sm text-gray-500 px-2"
             role="status"
             aria-live="polite"
           >
             Loading...
           </p>
         ) : lists.length === 0 ? (
-          <p class="text-sm text-gray-500 px-2">No job lists yet.</p>
+          <p className="text-sm text-gray-500 px-2">No job lists yet.</p>
         ) : (
           <>
-            <ul class="flex flex-col gap-2" role="listbox" aria-label="Job lists">
+            <ul className="flex flex-col gap-2" role="listbox" aria-label="Job lists">
               {renderedListItems}
             </ul>
           </>
         )}
       </nav>
 
-      <div class="p-4">
+      <div className="p-4">
         <button
           onClick={handleLogout}
-          class="flex items-center gap-2 w-full mb-4 px-3 py-2 rounded text-red-700 hover:bg-red-pantone/10"
+          className="flex items-center gap-2 w-full mb-4 px-3 py-2 rounded text-red-700 hover:bg-red-pantone/10"
         >
           <LogOut size={20} />
           Sign out

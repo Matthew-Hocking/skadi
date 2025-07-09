@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../lib/supabase";
 
 type AddListModalProps = {
@@ -91,17 +91,17 @@ export default function AddListModal({
 
   return (
     <div
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
     >
       <div
         ref={modalRef}
-        class="bg-white rounded-lg p-6 w-[90%] max-w-sm shadow-lg"
+        className="bg-white rounded-lg p-6 w-[90%] max-w-sm shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 class="text-lg font-semibold mb-4">Create New Job List</h2>
+        <h2 className="text-lg font-semibold mb-4">Create New Job List</h2>
 
         <form
           onSubmit={(e) => {
@@ -114,17 +114,17 @@ export default function AddListModal({
             type="text"
             placeholder="List title"
             value={title}
-            onInput={(e) => setTitle(e.currentTarget.value)}
-            class="w-full border px-3 py-2 rounded mb-3"
+            onChange={(e) => setTitle(e.currentTarget.value)}
+            className="w-full border px-3 py-2 rounded mb-3"
             maxLength={40}
           />
 
-          {error && <p class="text-sm text-red-600 mb-2">{error}</p>}
+          {error && <p className="text-sm text-red-600 mb-2">{error}</p>}
 
-          <div class="flex justify-end gap-3">
+          <div className="flex justify-end gap-3">
             <button
               type="button"
-              class="text-sm text-gray-600 hover:underline"
+              className="text-sm text-gray-600 hover:underline"
               onClick={onClose}
               disabled={saving}
             >
@@ -132,7 +132,7 @@ export default function AddListModal({
             </button>
             <button
               type="submit"
-              class="text-sm bg-azul text-white px-4 py-2 rounded hover:bg-azul/90"
+              className="text-sm bg-azul text-white px-4 py-2 rounded hover:bg-azul/90"
               disabled={saving}
             >
               {saving ? "Saving..." : "Create"}
