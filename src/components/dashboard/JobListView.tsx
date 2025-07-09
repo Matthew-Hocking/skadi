@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import NewJobModal from "./NewJobModal";
+import JobColumn from "./JobColumn";
 
 type JobList = {
   id: string;
@@ -120,31 +121,8 @@ export default function JobListView({ listId }: JobListViewProps) {
       <div className="flex-1 overflow-x-auto">
         <div className="grid grid-flow-col auto-cols-[minmax(280px,1fr)] min-w-full border-l border-gray-200 h-full">
           {jobStatuses.map((status) => {
-            const cards = jobItems.filter(
-              (item) => item.status_id === status.id
-            );
-            return (
-              <div
-                key={status.id}
-                className="flex flex-col border-r border-stone-200 h-full bg-stone-50 relative overflow-y-auto"
-              >
-                <div className="p-4 sticky top-0 z-10 bg-stone-50 text-center">
-                  <h3 className="text-lg text-stone-500">{status.title}</h3>
-                </div>
-
-                <div className="p-4 space-y-4 flex-1">
-                  {cards.map((item) => (
-                    <div
-                      key={item.id}
-                      className="bg-white border border-stone-300 rounded p-3 shadow-sm"
-                    >
-                      <h4 className="font-medium">{item.title}</h4>
-                      <p className="text-sm text-gray-600">{item.company}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
+            const cards = jobItems.filter((item) => item.status_id === status.id);
+            return <JobColumn key={status.id} status={status} items={cards} />;
           })}
         </div>
       </div>
