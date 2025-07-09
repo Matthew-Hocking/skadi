@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import ModalWrapper from '../ModalWrapper';
+
 
 type AuthModalProps = {
   mode: 'signin' | 'signup';
@@ -16,6 +18,12 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const validateForm = () => {
     if (!email.trim()) {
@@ -73,78 +81,72 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
   };
 
   return (
-    <div 
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="auth-modal-title"
-    >
-      <div className="bg-white rounded-lg p-6 shadow-lg w-[90%] max-w-sm">
-        <h2 id="auth-modal-title" className="text-xl font-bold mb-4">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</h2>
+    <ModalWrapper onClose={onClose}>
+      <h2 id="auth-modal-title" className="text-xl font-bold mb-4">{mode === 'signin' ? 'Sign In' : 'Sign Up'}</h2>
 
-        <form onSubmit={handleSubmit} noValidate>
-          <div className="mb-3">
-            <label htmlFor="email" className="sr-only">Email address</label>
-            <input
-              id="email"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.currentTarget.value)}
-              className="block w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-azul"
-              required
-              disabled={isLoading}
-              autoComplete="email"
-              aria-describedby={error ? "error-message" : undefined}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="sr-only">Password</label>
-            <input
-              id="password"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.currentTarget.value)}
-              className="block w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-azul"
-              required
-              minLength={mode === 'signup' ? 8 : undefined}
-              disabled={isLoading}
-              autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
-              aria-describedby={error ? "error-message" : undefined}
-            />
-          </div>
+      <form onSubmit={handleSubmit} noValidate>
+        <div className="mb-3">
+          <label htmlFor="email" className="sr-only">Email address</label>
+          <input
+            id="email"
+            type="email"
+            ref={inputRef}
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.currentTarget.value)}
+            className="block w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-azul"
+            required
+            disabled={isLoading}
+            autoComplete="email"
+            aria-describedby={error ? "error-message" : undefined}
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="password" className="sr-only">Password</label>
+          <input
+            id="password"
+            type="password"
+            placeholder={mode === "signup" ? "Create a Password" : "Password"}
+            value={password}
+            onChange={(e) => setPassword(e.currentTarget.value)}
+            className="block w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-azul"
+            required
+            minLength={mode === 'signup' ? 8 : undefined}
+            disabled={isLoading}
+            autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+            aria-describedby={error ? "error-message" : undefined}
+          />
+        </div>
 
-          {error && (
-            <p id="error-message" className="text-red-600 text-sm mb-3" role="alert" aria-live="polite">
-              {error}
-            </p>
-          )}
-          {success && (
-            <p className="text-green-600 text-sm mb-3" role="status" aria-live="polite">
-              {success}
-            </p>
-          )}
+        {error && (
+          <p id="error-message" className="text-red-600 text-sm mb-3" role="alert" aria-live="polite">
+            {error}
+          </p>
+        )}
+        {success && (
+          <p className="text-green-600 text-sm mb-3" role="status" aria-live="polite">
+            {success}
+          </p>
+        )}
 
-          <div className="flex justify-between">
-            <button 
-              type="button" 
-              onClick={onClose} 
-              className="text-sm"
-              disabled={isLoading}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="bg-azul text-white px-4 py-2 rounded disabled:opacity-50"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Loading...' : (mode === 'signin' ? 'Sign In' : 'Sign Up')}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <div className="flex justify-between">
+          <button 
+            type="button" 
+            onClick={onClose} 
+            className="text-sm"
+            disabled={isLoading}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="bg-azul text-white px-4 py-2 rounded disabled:opacity-50"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Loading...' : (mode === 'signin' ? 'Sign In' : 'Sign Up')}
+          </button>
+        </div>
+      </form>
+    </ModalWrapper>
   );
 }
