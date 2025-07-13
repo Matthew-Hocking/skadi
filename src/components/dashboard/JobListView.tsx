@@ -13,6 +13,9 @@ type JobItem = {
   id: string;
   title: string;
   company: string;
+  location?: string;
+  link?: string;
+  notes?: string;
   status_id: string;
   created_at: string;
 };
@@ -27,7 +30,6 @@ type JobStatus = {
 type JobListViewProps = {
   listId: string;
 };
-
 
 export default function JobListView({ listId }: JobListViewProps) {
   const [list, setList] = useState<JobList | null>(null);
@@ -73,7 +75,14 @@ export default function JobListView({ listId }: JobListViewProps) {
     setLoading(false);
   };
 
-  const handleCreateJob = async (newJob: { title: string; company: string }) => {
+  const handleCreateJob = async (newJob: {
+    title: string;
+    company: string;
+    location?: string;
+    link?: string;
+    description?: string;
+    notes?: string;
+  }) => {
     const firstStatus = jobStatuses[0];
     if (!firstStatus) return;
 
@@ -82,6 +91,9 @@ export default function JobListView({ listId }: JobListViewProps) {
       .insert({
         title: newJob.title,
         company: newJob.company,
+        location: newJob.location,
+        link: newJob.link,
+        notes: newJob.notes,
         job_list_id: listId,
         status_id: firstStatus.id,
       })
@@ -121,7 +133,9 @@ export default function JobListView({ listId }: JobListViewProps) {
       <div className="flex-1 overflow-x-auto">
         <div className="grid grid-flow-col auto-cols-[minmax(280px,1fr)] min-w-full border-l border-gray-200 h-full">
           {jobStatuses.map((status) => {
-            const cards = jobItems.filter((item) => item.status_id === status.id);
+            const cards = jobItems.filter(
+              (item) => item.status_id === status.id
+            );
             return <JobColumn key={status.id} status={status} items={cards} />;
           })}
         </div>

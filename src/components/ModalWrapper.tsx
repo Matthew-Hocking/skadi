@@ -9,7 +9,7 @@ type ModalWrapperProps = {
 export default function ModalWrapper({
   onClose,
   children,
-  className = "bg-white rounded-lg p-6 w-[90%] max-w-sm shadow-lg",
+  className = "w-[50%]",
 }: ModalWrapperProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const previouslyFocusedElement = useRef<HTMLElement | null>(null);
@@ -65,14 +65,23 @@ export default function ModalWrapper({
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/50 flex items-center justify-center md:items-center md:justify-center z-50"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
     >
       <div
         ref={modalRef}
-        className={className}
+        className={`
+          bg-white shadow-lg
+          p-4 sm:p-6
+          max-h-[100dvh]
+          overflow-y-auto
+          md:rounded-lg
+          w-full h-full max-w-none
+          md:h-auto md:w-[90%] md:max-w-2xl
+          ${className}
+        `}
         onClick={(e) => e.stopPropagation()}
       >
         {children}
