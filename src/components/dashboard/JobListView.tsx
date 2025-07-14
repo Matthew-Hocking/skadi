@@ -17,6 +17,7 @@ type JobItem = {
   link?: string;
   notes?: string;
   status_id: string;
+  sort_order: number;
   created_at: string;
 };
 
@@ -37,7 +38,7 @@ export default function JobListView({ listId }: JobListViewProps) {
   const [jobStatuses, setJobStatuses] = useState<JobStatus[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [draggedItem, setDraggedItem] = useState<string | null>(null)
+  const [draggedItem, setDraggedItem] = useState<string | null>(null);
 
   useEffect(() => {
     if (!listId) return;
@@ -53,7 +54,7 @@ export default function JobListView({ listId }: JobListViewProps) {
         .from("job_item")
         .select("*")
         .eq("job_list_id", listId)
-        .order("created_at", { ascending: false }),
+        .order("sort_order", { ascending: true }),
       supabase
         .from("job_status")
         .select("*")
@@ -76,6 +77,72 @@ export default function JobListView({ listId }: JobListViewProps) {
     setLoading(false);
   };
 
+  const calculateNewOrder = (
+    targetStatusId: string,
+    insertIndex: number
+  ): number => {
+    const statusItems = jobItems
+      .filter((item) => item.status_id === targetStatusId)
+      .sort((a, b) => a.sort_order - b.sort_order);
+
+    if (insertIndex === 0) {
+      if (statusItems.length === 0) return 1.0;
+      return statusItems[0].sort_order / 2;
+    }
+
+    if (insertIndex >= statusItems.length) {
+      if (statusItems.length === 0) return 1.0;
+      return statusItems[statusItems.length - 1].sort_order + 1;
+    }
+
+    const prevOrder = statusItems[insertIndex - 1].sort_order;
+    const nextOrder = statusItems[insertIndex].sort_order;
+    return (prevOrder + nextOrder) / 2;
+  };
+
+  const shouldRebalance = (order: number): boolean => {
+    const decimalPart = order % 1;
+    return (
+      decimalPart !== 0 && decimalPart.toString().split(".")[1]?.length > 6
+    );
+  };
+
+  const rebalanceColumn = async (statusId: string) => {
+    const statusItems = jobItems
+      .filter((item) => item.status_id === statusId)
+      .sort((a, b) => a.sort_order - b.sort_order);
+
+    const updates = statusItems.map((item, index) => ({
+      id: item.id,
+      sort_order: (index + 1) * 10,
+    }));
+
+    if (updates.length === 0) return;
+
+    const { error } = await supabase.from("job_item").upsert(
+      updates.map((update) => ({
+        id: update.id,
+        sort_order: update.sort_order,
+      })),
+      {
+        onConflict: "id",
+        ignoreDuplicates: false,
+      }
+    );
+
+    if (error) {
+      console.error("Error rebalancing column:", error);
+      return;
+    }
+
+    setJobItems((prev) =>
+      prev.map((item) => {
+        const update = updates.find((u) => u.id === item.id);
+        return update ? { ...item, sort_order: update.sort_order } : item;
+      })
+    );
+  };
+
   const handleCreateJob = async (newJob: {
     title: string;
     company: string;
@@ -87,6 +154,8 @@ export default function JobListView({ listId }: JobListViewProps) {
     const firstStatus = jobStatuses[0];
     if (!firstStatus) return;
 
+    const newOrder = calculateNewOrder(firstStatus.id, 0);
+
     const { data, error } = await supabase
       .from("job_item")
       .insert({
@@ -97,6 +166,7 @@ export default function JobListView({ listId }: JobListViewProps) {
         notes: newJob.notes,
         job_list_id: listId,
         status_id: firstStatus.id,
+        sort_order: newOrder,
       })
       .select()
       .single();
@@ -106,7 +176,10 @@ export default function JobListView({ listId }: JobListViewProps) {
       return;
     }
 
-    setJobItems((prev) => [data, ...prev]);
+    setJobItems((prev) => [
+      data,
+      ...prev.filter((item) => item.id !== data.id),
+    ]);
   };
 
   const handleDragStart = (itemId: string) => {
@@ -117,27 +190,52 @@ export default function JobListView({ listId }: JobListViewProps) {
     setDraggedItem(null);
   };
 
-  const handleDrop = async (targettedStatusId: string) => {
-    if (!draggedItem || draggedItem === targettedStatusId) return;
+  const handleDrop = async (targetStatusId: string, insertIndex: number) => {
+    if (!draggedItem) return;
 
     const item = jobItems.find((job) => job.id === draggedItem);
-    if (!item || item.status_id === targettedStatusId) return;
+    if (!item) return;
 
-    setJobItems((prev) => prev.map((job) => job.id === draggedItem ? { ...job, status_id: targettedStatusId} : job ) )
+    const newOrder = calculateNewOrder(targetStatusId, insertIndex);
+
+    if (
+      item.status_id === targetStatusId &&
+      Math.abs(item.sort_order - newOrder) < 0.000001
+    ) {
+      return;
+    }
+
+    setJobItems((prev) =>
+      prev.map((job) =>
+        job.id === draggedItem
+          ? { ...job, status_id: targetStatusId, sort_order: newOrder }
+          : job
+      )
+    );
 
     const { error } = await supabase
       .from("job_item")
-      .update({ status_id: targettedStatusId })
+      .update({ status_id: targetStatusId, sort_order: newOrder })
       .eq("id", draggedItem);
 
     if (error) {
-      console.log("Error updating job status:", error.message);
-
-      setJobItems((prev) => prev.map((job) => job.id === draggedItem ? { ...job, status_id: item.status_id } : job ))
+      console.error("Error updating job:", error.message);
+      setJobItems((prev) =>
+        prev.map((job) =>
+          job.id === draggedItem
+            ? { ...job, status_id: item.status_id, sort_order: item.sort_order }
+            : job
+        )
+      );
+      return;
     }
 
-    setDraggedItem(null)
-  }
+    if (shouldRebalance(newOrder)) {
+      setTimeout(() => rebalanceColumn(targetStatusId), 100);
+    }
+
+    setDraggedItem(null);
+  };
 
   if (loading) return <p className="text-gray-500">Loading...</p>;
   if (!list) return <p className="text-red-600">Job list not found.</p>;
@@ -164,9 +262,9 @@ export default function JobListView({ listId }: JobListViewProps) {
       <div className="flex-1 overflow-x-auto">
         <div className="grid grid-flow-col auto-cols-[minmax(280px,1fr)] min-w-full border-l border-gray-200 h-full">
           {jobStatuses.map((status) => {
-            const cards = jobItems.filter(
-              (item) => item.status_id === status.id
-            );
+            const cards = jobItems
+              .filter((item) => item.status_id === status.id)
+              .sort((a, b) => a.sort_order - b.sort_order);
             return (
               <JobColumn
                 key={status.id}

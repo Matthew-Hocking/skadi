@@ -35,16 +35,16 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         onClose();
       }
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
         handleSubmit(e as any);
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [onClose, title, company]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,7 +52,7 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
     if (!title.trim() || !company.trim() || isSubmitting) return;
 
     setIsSubmitting(true);
-    
+
     try {
       onCreate({
         title: title.trim(),
@@ -63,7 +63,7 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
       });
       onClose();
     } catch (error) {
-      console.error('Error creating job:', error);
+      console.error("Error creating job:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -92,7 +92,7 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
               aria-describedby="title-error"
             />
           </div>
-          
+
           <div>
             <label htmlFor="company" className="block text-sm font-medium mb-1">
               Company <span className="text-red-500">*</span>
@@ -108,9 +108,12 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
               aria-describedby="company-error"
             />
           </div>
-          
+
           <div>
-            <label htmlFor="location" className="block text-sm font-medium mb-1">
+            <label
+              htmlFor="location"
+              className="block text-sm font-medium mb-1"
+            >
               Location
             </label>
             <input
@@ -123,7 +126,7 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
               placeholder="e.g., San Francisco, Remote, New York"
             />
           </div>
-          
+
           <div>
             <label htmlFor="link" className="block text-sm font-medium mb-1">
               Job Link
@@ -175,11 +178,11 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
             disabled={!isFormValid || isSubmitting}
             className="bg-azul text-white px-4 py-2 rounded hover:bg-azul-dark disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
-            {isSubmitting ? 'Creating...' : 'Create'}
+            {isSubmitting ? "Creating..." : "Create"}
           </button>
         </div>
       </form>
-      
+
       <div className="text-xs text-gray-500 mt-4 text-center">
         Press Escape to cancel • Ctrl+Enter to submit
       </div>

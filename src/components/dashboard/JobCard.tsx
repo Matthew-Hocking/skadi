@@ -3,6 +3,7 @@ type JobItem = {
   title: string;
   company: string;
   status_id: string;
+  sort_order: number;
   created_at: string;
 };
 
@@ -11,14 +12,15 @@ type JobCardProps = {
   onDragStart: (itemId: string) => void;
   onDragEnd: () => void;
   isDragging: boolean;
-
-}
+  isGhost?: boolean;
+};
 
 export default function JobCard({
   item,
   onDragStart,
   onDragEnd,
   isDragging,
+  isGhost = false,
 }: JobCardProps) {
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.effectAllowed = "move";
@@ -28,16 +30,20 @@ export default function JobCard({
 
   const handleDragEnd = () => {
     onDragEnd();
-  }
+  };
+
   return (
     <div
-      draggable
+      data-job-card
+      draggable={!isGhost}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      className={`bg-white border border-stone-300 rounded p-3 shadow-sm cursor-move transition-all ${
-        isDragging
-          ? "opacity-50 transform rotate-2 scale-95"
-          : "hover:shadow-md hover:border-stone-400"
+      className={`bg-white border border-stone-300 rounded p-3 shadow-sm select-none transition-all duration-150 ${
+        isGhost
+          ? "opacity-30 border-dashed border-stone-400 scale-95"
+          : isDragging
+          ? "opacity-0"
+          : "cursor-move hover:shadow-md hover:border-stone-400 hover:scale-[1.02] active:scale-95"
       }`}
     >
       <h4 className="font-medium">{item.title}</h4>
