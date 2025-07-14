@@ -37,6 +37,7 @@ export default function JobListView({ listId }: JobListViewProps) {
   const [jobStatuses, setJobStatuses] = useState<JobStatus[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [draggedItem, setDraggedItem] = useState<string | null>(null)
 
   useEffect(() => {
     if (!listId) return;
@@ -108,6 +109,36 @@ export default function JobListView({ listId }: JobListViewProps) {
     setJobItems((prev) => [data, ...prev]);
   };
 
+  const handleDragStart = (itemId: string) => {
+    setDraggedItem(itemId);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedItem(null);
+  };
+
+  const handleDrop = async (targettedStatusId: string) => {
+    if (!draggedItem || draggedItem === targettedStatusId) return;
+
+    const item = jobItems.find((job) => job.id === draggedItem);
+    if (!item || item.status_id === targettedStatusId) return;
+
+    setJobItems((prev) => prev.map((job) => job.id === draggedItem ? { ...job, status_id: targettedStatusId} : job ) )
+
+    const { error } = await supabase
+      .from("job_item")
+      .update({ status_id: targettedStatusId })
+      .eq("id", draggedItem);
+
+    if (error) {
+      console.log("Error updating job status:", error.message);
+
+      setJobItems((prev) => prev.map((job) => job.id === draggedItem ? { ...job, status_id: item.status_id } : job ))
+    }
+
+    setDraggedItem(null)
+  }
+
   if (loading) return <p className="text-gray-500">Loading...</p>;
   if (!list) return <p className="text-red-600">Job list not found.</p>;
 
@@ -136,7 +167,17 @@ export default function JobListView({ listId }: JobListViewProps) {
             const cards = jobItems.filter(
               (item) => item.status_id === status.id
             );
-            return <JobColumn key={status.id} status={status} items={cards} />;
+            return (
+              <JobColumn
+                key={status.id}
+                status={status}
+                items={cards}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                onDrop={handleDrop}
+                draggedItem={draggedItem}
+              />
+            );
           })}
         </div>
       </div>
