@@ -43,10 +43,10 @@ export default function JobCard({
           ? "opacity-30 border-dashed border-stone-400 scale-95"
           : isDragging
           ? "opacity-0"
-          : "cursor-move hover:shadow-md hover:border-stone-400 hover:scale-[1.02] active:scale-95"
+          : "cursor-grab hover:shadow-md hover:border-stone-400 hover:scale-[1.02] active:scale-95"
       }`}
     >
-      <h4 className="font-medium">{item.title}</h4>
+      <h4 className="font-medium text-base mb-2">{item.title}</h4>
       <p className="text-sm text-gray-600">{item.company}</p>
     </div>
   );

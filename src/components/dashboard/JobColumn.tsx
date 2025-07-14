@@ -91,8 +91,13 @@ export default function JobColumn({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <div className="p-4 sticky top-0 z-10 bg-stone-50 text-center">
-        <h3 className="text-lg text-stone-500">{status.title}</h3>
+      <div className="p-4 sticky flex flex-col items-center top-0 z-10 bg-stone-50 text-center">
+        <h3 className="text-xl tracking-wide text-stone-500">{status.title}</h3>
+        {items.length > 0 && (
+          <p className="min-w-6 h-6 px-2 bg-stone-400 text-white rounded-full flex items-center justify-center text-sm font-semibold">
+            {items.length}
+          </p>
+        )}
       </div>
 
       <div className="p-4 space-y-4 flex-1">
