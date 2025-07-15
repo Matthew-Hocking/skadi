@@ -4,3 +4,4 @@ export { default as JobListView } from "./JobListView";
 export { default as NewJobModal } from "./NewJobModal";
 export { default as JobCard } from "./JobCard";
 export { default as JobColumn } from "./JobColumn";
+export { default as JobContentModal } from "./JobContentModal";

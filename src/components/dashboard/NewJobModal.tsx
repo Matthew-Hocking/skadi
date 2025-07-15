@@ -1,26 +1,53 @@
 import { useEffect, useRef, useState } from "react";
 import ModalWrapper from "../ModalWrapper";
 
+type JobItem = {
+  id: string;
+  title: string;
+  company: string;
+  status_id: string;
+  sort_order: number;
+  created_at: string;
+};
+
 type NewJobModalProps = {
   onClose: () => void;
-  onCreate: (job: {
+  onCreate?: (job: {
     title: string;
     company: string;
     location?: string;
     link?: string;
     notes?: string;
   }) => void;
+  onUpdate?: (jobId: string, job: {
+    title: string;
+    company: string;
+    location?: string;
+    link?: string;
+    notes?: string;
+  }) => void;
+  existingJob?: JobItem & {
+    location?: string;
+    link?: string;
+    notes?: string;
+  };
 };
 
-export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
-  const [title, setTitle] = useState("");
-  const [company, setCompany] = useState("");
-  const [location, setLocation] = useState("");
-  const [link, setLink] = useState("");
-  const [notes, setNotes] = useState("");
+export default function NewJobModal({
+  onClose,
+  onCreate,
+  onUpdate,
+  existingJob,
+}: NewJobModalProps) {
+  const [title, setTitle] = useState(existingJob?.title || "");
+  const [company, setCompany] = useState(existingJob?.company || "");
+  const [location, setLocation] = useState(existingJob?.location || "");
+  const [link, setLink] = useState(existingJob?.link || "");
+  const [notes, setNotes] = useState(existingJob?.notes || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const previouslyFocusedElement = useRef<HTMLElement | null>(null);
+  const isEditing = !!existingJob;
 
   useEffect(() => {
     previouslyFocusedElement.current = document.activeElement as HTMLElement;
@@ -54,16 +81,23 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
     setIsSubmitting(true);
 
     try {
-      onCreate({
+      const jobData = {
         title: title.trim(),
         company: company.trim(),
         location: location?.trim() || undefined,
         link: link?.trim() || undefined,
         notes: notes?.trim() || undefined,
-      });
+      };
+
+      if (isEditing && onUpdate) {
+        onUpdate(existingJob.id, jobData);
+      } else if (onCreate) {
+        onCreate(jobData);
+      }
+      
       onClose();
     } catch (error) {
-      console.error("Error creating job:", error);
+      console.error(`Error ${isEditing ? 'updating' : 'creating'} job:`, error);
     } finally {
       setIsSubmitting(false);
     }
@@ -73,7 +107,9 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
 
   return (
     <ModalWrapper onClose={onClose}>
-      <h2 className="text-xl font-semibold mb-5">Add New Job</h2>
+      <h2 className="text-xl font-semibold mb-5">
+        {isEditing ? "Edit Job" : "Add New Job"}
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="flex flex-col space-y-6 py-4">
           <div>
@@ -178,7 +214,10 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
             disabled={!isFormValid || isSubmitting}
             className="bg-azul text-white px-4 py-2 rounded hover:bg-azul-dark disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
-            {isSubmitting ? "Creating..." : "Create"}
+            {isSubmitting 
+              ? (isEditing ? "Updating..." : "Creating...") 
+              : (isEditing ? "Update" : "Create")
+            }
           </button>
         </div>
       </form>

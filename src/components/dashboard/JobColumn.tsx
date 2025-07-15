@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 import JobCard from "./JobCard";
+import JobContentModal from "./JobContentModal";
+import NewJobModal from "./NewJobModal";
 
 type JobItem = {
   id: string;
@@ -24,6 +26,13 @@ type JobColumnProps = {
   onDragEnd: () => void;
   onDrop: (statusId: string, insertIndex: number) => void;
   draggedItem: string | null;
+  onUpdateJob: (jobId: string, updatedJob: {
+    title: string;
+    company: string;
+    location?: string;
+    link?: string;
+    notes?: string;
+  }) => void;
 };
 
 export default function JobColumn({
@@ -33,9 +42,12 @@ export default function JobColumn({
   onDragEnd,
   onDrop,
   draggedItem,
+  onUpdateJob,
 }: JobColumnProps) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [dropIndex, setDropIndex] = useState<number | null>(null);
+  const [selectedJob, setSelectedJob] = useState<JobItem | null>(null);
+  const [editingJob, setEditingJob] = useState<JobItem | null>(null);
   const columnRef = useRef<HTMLDivElement>(null);
 
   const getDropIndex = (e: React.DragEvent): number => {
@@ -81,6 +93,19 @@ export default function JobColumn({
     setDropIndex(null);
   };
 
+  const handleJobClick = (job: JobItem) => {
+    setSelectedJob(job);
+  };
+
+    const handleEditJob = (job: JobItem) => {
+    setSelectedJob(null);
+    setEditingJob(job);
+  };
+
+  const handleUpdateJob = (jobId: string, updatedJob: any) => {
+    setEditingJob(null);
+  };
+
   return (
     <div
       ref={columnRef}
@@ -119,6 +144,7 @@ export default function JobColumn({
                   onDragEnd={onDragEnd}
                   isDragging={false}
                   isGhost={true}
+                  onJobClick={handleJobClick}
                 />
               ) : (
                 <JobCard
@@ -126,11 +152,28 @@ export default function JobColumn({
                   onDragStart={onDragStart}
                   onDragEnd={onDragEnd}
                   isDragging={isDraggedItem}
+                  onJobClick={handleJobClick}
                 />
               )}
             </div>
           );
         })}
+
+        {selectedJob && (
+          <JobContentModal
+            onClose={() => setSelectedJob(null)}
+            job={selectedJob}
+            onEdit={handleEditJob}
+          />
+        )}
+
+        {editingJob && (
+          <NewJobModal
+            onClose={() => setEditingJob(null)}
+            onUpdate={onUpdateJob}
+            existingJob={editingJob}
+          />
+        )}
 
         {isDragOver && dropIndex === items.length && (
           <div className="h-1 bg-blue-400 rounded-full mx-2 transition-all duration-200" />

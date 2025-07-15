@@ -1,3 +1,5 @@
+import React from "react";
+
 type JobItem = {
   id: string;
   title: string;
@@ -13,6 +15,7 @@ type JobCardProps = {
   onDragEnd: () => void;
   isDragging: boolean;
   isGhost?: boolean;
+  onJobClick: (job: JobItem) => void;
 };
 
 export default function JobCard({
@@ -21,6 +24,7 @@ export default function JobCard({
   onDragEnd,
   isDragging,
   isGhost = false,
+  onJobClick,
 }: JobCardProps) {
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.effectAllowed = "move";
@@ -46,7 +50,12 @@ export default function JobCard({
           : "cursor-grab hover:shadow-md hover:border-stone-400 hover:scale-[1.02] active:scale-95"
       }`}
     >
-      <h4 className="font-medium text-base mb-2">{item.title}</h4>
+      <h4
+        className="font-medium text-base mb-2 cursor-pointer hover:text-azul hover:underline underline-offset-2 transition-colors"
+        onClick={() => onJobClick(item)}
+      >
+        {item.title}
+      </h4>
       <p className="text-sm text-gray-600">{item.company}</p>
     </div>
   );

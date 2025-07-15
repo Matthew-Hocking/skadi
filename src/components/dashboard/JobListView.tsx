@@ -183,6 +183,38 @@ export default function JobListView({ listId }: JobListViewProps) {
     ]);
   };
 
+  const handleUpdateJob = async (jobId: string, updatedJob: {
+    title: string;
+    company: string;
+    location?: string;
+    link?: string;
+    notes?: string;
+  }) => {
+    const { error } = await supabase
+      .from("job_item")
+      .update({
+        title: updatedJob.title,
+        company: updatedJob.company,
+        location: updatedJob.location,
+        link: updatedJob.link,
+        notes: updatedJob.notes,
+      })
+      .eq("id", jobId);
+
+    if (error) {
+      console.error("Error updating job:", error.message);
+      return;
+    }
+
+    setJobItems((prev) =>
+      prev.map((job) =>
+        job.id === jobId
+          ? { ...job, ...updatedJob }
+          : job
+      )
+    );
+  };
+
   const handleDragStart = (itemId: string) => {
     setDraggedItem(itemId);
   };
@@ -281,6 +313,7 @@ export default function JobListView({ listId }: JobListViewProps) {
                 onDragEnd={handleDragEnd}
                 onDrop={handleDrop}
                 draggedItem={draggedItem}
+                onUpdateJob={handleUpdateJob}
               />
             );
           })}
