@@ -8,8 +8,8 @@ export function useAuth() {
 
   useEffect(() => {
     const getSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setUser(data?.session?.user ?? null);
+      const { data } = await supabase.auth.getUser();
+      setUser(data?.user ?? null);
       setLoading(false);
     };
 
