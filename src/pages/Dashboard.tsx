@@ -1,29 +1,31 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Sidebar, AddListModal, JobListView } from "../components/dashboard";
 
 function Dashboard() {
-  const [selectedListId, setSelectedListId] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [refreshAfterCreate, setRefreshAfterCreate] = useState<() => void>(() => () => {});
+  const [refreshAfterCreate, setRefreshAfterCreate] = useState<() => void>(
+    () => () => {}
+  );
+  const { listId } = useParams<{ listId: string }>();
+
+  const handleAddNewClick = (refreshFn: () => void) => {
+    setRefreshAfterCreate(() => refreshFn);
+    setShowAddModal(true);
+  };
 
   return (
     <div className="flex h-screen">
-      <Sidebar
-        selectedListId={selectedListId}
-        onSelect={setSelectedListId}
-        onAddNewClick={(refreshFn) => {
-          setRefreshAfterCreate(() => refreshFn);
-          setShowAddModal(true);
-        }}
-      />
+      <Sidebar onAddNewClick={handleAddNewClick} />
 
       <main className="flex-1 overflow-y-auto">
-        {!selectedListId ? (
-          <p className="text-gray-500">Select a job list to get started.</p>
+        {!listId ? (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-gray-500">Select a job list to get started.</p>
+          </div>
         ) : (
-          <JobListView listId={selectedListId} />
+          <JobListView listId={listId} />
         )}
       </main>
 

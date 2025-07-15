@@ -12,11 +12,17 @@ export function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route 
-          path="/" 
-          element={user ? <Navigate to="/dashboard" replace /> : <LandingPage />} 
+        <Route
+          path="/"
+          element={
+            user ? <Navigate to="/dashboard" replace /> : <LandingPage />
+          }
         />
         <Route path="/dashboard" element={<ProtectedDashboard />} />
+        <Route
+          path="/dashboard/list/:listId"
+          element={<ProtectedDashboard />}
+        />
       </Routes>
     </BrowserRouter>
   );

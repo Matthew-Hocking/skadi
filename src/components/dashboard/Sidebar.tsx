@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import { LogOut, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
@@ -11,22 +11,17 @@ type JobList = {
 };
 
 type SidebarProps = {
-  selectedListId: string | null;
-  onSelect: (id: string | null) => void;
   onAddNewClick: (onCreated: () => void) => void;
 };
 
-export default function Sidebar({
-  selectedListId,
-  onSelect,
-  onAddNewClick,
-}: SidebarProps) {
+export default function Sidebar({ onAddNewClick }: SidebarProps) {
   const [lists, setLists] = useState<JobList[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { listId } = useParams<{ listId: string }>();
 
   useEffect(() => {
     const fetchLists = async () => {
@@ -47,9 +42,56 @@ export default function Sidebar({
     fetchLists();
   }, [refreshKey]);
 
+  useEffect(() => {
+    if (!loading && lists.length > 0 && !listId) {
+      navigate(`/dashboard/list/${lists[0].id}`, { replace: true });
+    }
+  }, [loading, lists, listId, navigate]);
+
+  useEffect(() => {
+    if (!loading && listId && lists.length > 0) {
+      const listExists = lists.some((list) => list.id === listId);
+      if (!listExists) {
+        navigate(
+          lists.length > 0 ? `/dashboard/list/${lists[0].id}` : "/dashboard",
+          { replace: true }
+        );
+      }
+    }
+  }, [loading, listId, lists, navigate]);
+
   const handleLogout = async () => {
     await logout();
     navigate("/");
+  };
+
+  const handleListSelect = (id: string) => {
+    navigate(`/dashboard/list/${id}`);
+  };
+
+  const handleDeleteList = async (list: JobList) => {
+    const confirmDelete = confirm(`Delete "${list.title}"?`);
+    if (!confirmDelete) return;
+
+    const { error } = await supabase
+      .from("job_list")
+      .delete()
+      .eq("id", list.id);
+
+    if (error) {
+      alert("Error deleting list: " + error.message);
+    } else {
+      const updatedLists = lists.filter((l) => l.id !== list.id);
+      setLists(updatedLists);
+
+      if (listId === list.id) {
+        if (updatedLists.length > 0) {
+          navigate(`/dashboard/list/${updatedLists[0].id}`, { replace: true });
+        } else {
+          navigate("/dashboard", { replace: true });
+        }
+      }
+    }
   };
 
   const renderedListItems = useMemo(() => {
@@ -58,39 +100,24 @@ export default function Sidebar({
         key={list.id}
         role="option"
         className={`flex items-center justify-between group rounded hover:bg-gray-100 ${
-          selectedListId === list.id ? "bg-gray-100" : ""
+          listId === list.id ? "bg-gray-100" : ""
         }`}
       >
         <button
-          onClick={() => onSelect(list.id)}
-          aria-current={selectedListId === list.id ? "page" : undefined}
+          onClick={() => handleListSelect(list.id)}
+          aria-current={listId === list.id ? "page" : undefined}
           aria-label={`Select job list: ${list.title}`}
           className={`flex-1 text-left text-sm py-2 px-3 ${
-            selectedListId === list.id ? "text-azul rounded font-semibold bg-gray-100" : ""
+            listId === list.id
+              ? "text-azul rounded font-semibold bg-gray-100"
+              : ""
           }`}
         >
           {list.title}
         </button>
 
         <button
-          onClick={async () => {
-            const confirmDelete = confirm(`Delete "${list.title}"?`);
-            if (!confirmDelete) return;
-
-            const { error } = await supabase
-              .from("job_list")
-              .delete()
-              .eq("id", list.id);
-
-            if (error) {
-              alert("Error deleting list: " + error.message);
-            } else {
-              if (selectedListId === list.id) {
-                onSelect(null);
-              }
-              setLists((prev) => prev.filter((l) => l.id !== list.id));
-            }
-          }}
+          onClick={() => handleDeleteList(list)}
           className="text-gray-700 hover:text-red-500 px-3 py-2 opacity-0 group-hover:opacity-100 focus:opacity-100 focus:text-red-500"
           aria-label={`Delete list: ${list.title}`}
           title={`Delete "${list.title}"`}
@@ -99,7 +126,7 @@ export default function Sidebar({
         </button>
       </li>
     ));
-  }, [lists, selectedListId]);
+  }, [lists, listId]);
 
   return (
     <aside
@@ -107,9 +134,7 @@ export default function Sidebar({
       role="complementary"
       aria-label="Job lists sidebar"
     >
-      <div className="py-4 px-7 text-5xl grenze-gotisch-display">
-        Skadi
-      </div>
+      <div className="py-4 px-7 text-5xl grenze-gotisch-display">Skadi</div>
 
       <nav className="flex-1 overflow-y-auto p-4">
         <button
@@ -134,7 +159,11 @@ export default function Sidebar({
           <p className="text-sm text-gray-500 px-2">No job lists yet.</p>
         ) : (
           <>
-            <ul className="flex flex-col gap-2" role="listbox" aria-label="Job lists">
+            <ul
+              className="flex flex-col gap-2"
+              role="listbox"
+              aria-label="Job lists"
+            >
               {renderedListItems}
             </ul>
           </>
