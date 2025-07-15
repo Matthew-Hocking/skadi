@@ -22,7 +22,7 @@ function Dashboard() {
       <main className="flex-1 overflow-y-auto">
         {!listId ? (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-500">Select a job list to get started.</p>
+            <p className="text-gray-500">Create a new list to get started.</p>
           </div>
         ) : (
           <JobListView listId={listId} />

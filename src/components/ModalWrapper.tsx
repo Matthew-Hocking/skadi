@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { motion, AnimatePresence, type Variants } from "motion/react";
 
 type ModalWrapperProps = {
   onClose: () => void;
@@ -63,29 +64,82 @@ export default function ModalWrapper({
     };
   }, []);
 
+  const backdropVariants: Variants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.1,
+      },
+    },
+    exit: {
+      opacity: 0,
+      transition: {
+        duration: 0.1,
+      },
+    },
+  };
+
+  const modalVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.8,
+      y: -50,
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.1,
+        staggerChildren: 0.1,
+      },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.8,
+      y: -50,
+      transition: {
+        duration: 0.1,
+      },
+    },
+  };
+
   return (
-    <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center md:items-center md:justify-center z-50"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-    >
-      <div
-        ref={modalRef}
-        className={`
-          bg-white shadow-lg
-          p-4 sm:p-6
-          max-h-[100dvh]
-          overflow-y-auto
-          md:rounded-lg
-          w-full h-full max-w-none
-          md:h-auto md:w-[90%] md:max-w-2xl
-          ${className}
-        `}
-        onClick={(e) => e.stopPropagation()}
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 bg-black/50 flex items-center justify-center md:items-center md:justify-center z-50"
+        onClick={onClose}
+        role="dialog"
+        aria-modal="true"
+        variants={backdropVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
       >
-        {children}
-      </div>
-    </div>
+        <motion.div
+          ref={modalRef}
+          className={`
+            bg-white shadow-lg
+            p-4 sm:p-6
+            max-h-[100dvh]
+            overflow-y-auto
+            md:rounded-lg
+            w-full h-full max-w-none
+            md:h-auto md:w-[90%] md:max-w-2xl
+            ${className}
+          `}
+          onClick={(e) => e.stopPropagation()}
+          variants={modalVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          {children}
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

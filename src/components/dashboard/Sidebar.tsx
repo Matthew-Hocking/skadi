@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
-import { LogOut, Plus, Trash2 } from "lucide-react";
+import { Loader, LogOut, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
 type JobList = {
@@ -148,13 +148,10 @@ export default function Sidebar({ onAddNewClick }: SidebarProps) {
           New List
         </button>
         {loading ? (
-          <p
-            className="text-sm text-gray-500 px-2"
-            role="status"
-            aria-live="polite"
-          >
-            Loading...
-          </p>
+          <div className="flex flex-row gap-4">
+            <Loader className="animate-spin text-stone-500"/>
+            <p className="animate-pulse text-stone-500 m-0 text-sm">Loading...</p>
+          </div>
         ) : lists.length === 0 ? (
           <p className="text-sm text-gray-500 px-2">No job lists yet.</p>
         ) : (

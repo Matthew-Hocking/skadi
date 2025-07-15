@@ -72,7 +72,7 @@ export default function NewJobModal({ onClose, onCreate }: NewJobModalProps) {
   const isFormValid = title.trim() && company.trim();
 
   return (
-    <ModalWrapper onClose={onClose} className="w-[50%]">
+    <ModalWrapper onClose={onClose}>
       <h2 className="text-xl font-semibold mb-5">Add New Job</h2>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="flex flex-col space-y-6 py-4">

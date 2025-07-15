@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import NewJobModal from "./NewJobModal";
 import JobColumn from "./JobColumn";
+import { Loader, Plus } from "lucide-react";
 
 type JobList = {
   id: string;
@@ -237,18 +238,24 @@ export default function JobListView({ listId }: JobListViewProps) {
     setDraggedItem(null);
   };
 
-  if (loading) return <p className="text-gray-500">Loading...</p>;
-  if (!list) return <p className="text-red-600">Job list not found.</p>;
+  if (!loading && !list) return <p className="text-red-600">Job list not found.</p>;
 
   return (
     <div className="h-screen flex flex-col">
       <div className="flex justify-between items-center p-4 border-b-2 border-stone-200 bg-white sticky top-0 z-20">
-        <h1 className="text-xl mb-0 font-semibold">{list.title}</h1>
+        {loading ? (
+          <div className="flex flex-row gap-4">
+            <Loader className="animate-spin text-stone-500"/>
+            <p className="animate-pulse text-stone-500 m-0 leading-snug">Loading...</p>
+          </div>
+        ) : (
+          <h1 className="text-xl mb-0 font-semibold">{list?.title}</h1>
+        )}
         <button
-          className="bg-azul text-white px-3 py-2 rounded text-sm"
+          className="flex gap-1 bg-azul text-white px-3 py-2 rounded text-sm leading-tight"
           onClick={() => setShowModal(true)}
         >
-          + New Job
+          <Plus size={18}/> New Job
         </button>
       </div>
 
