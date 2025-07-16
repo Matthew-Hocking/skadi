@@ -32,12 +32,24 @@ export default function AuthCallback() {
             navigate("/dashboard");
           }, 1500);
         } else {
-          setStatus("error");
-          setErrorMessage("No session found");
+          setTimeout(async () => {
+            const { data: retryData, error: retryError } =
+              await supabase.auth.getSession();
 
-          setTimeout(() => {
-            navigate("/login");
-          }, 3000);
+            if (retryError || !retryData.session) {
+              setStatus("error");
+              setErrorMessage("No session found");
+
+              setTimeout(() => {
+                navigate("/login");
+              }, 3000);
+            } else {
+              setStatus("success");
+              setTimeout(() => {
+                navigate("/dashboard");
+              }, 1500);
+            }
+          }, 1000);
         }
       } catch (err) {
         console.error("Unexpected error in auth callback:", err);
@@ -57,7 +69,7 @@ export default function AuthCallback() {
     if (status === "success") {
       navigate("/dashboard");
     } else {
-      navigate("/login");
+      navigate("/");
     }
   };
 
@@ -66,7 +78,7 @@ export default function AuthCallback() {
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 text-center">
         {status === "loading" && (
           <>
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-azul mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
             <h2 className="text-xl font-semibold text-gray-900 mb-2">
               Completing Authentication
             </h2>
@@ -99,7 +111,7 @@ export default function AuthCallback() {
             </p>
             <button
               onClick={handleManualRedirect}
-              className="text-azul hover:text-azul-dark underline text-sm"
+              className="text-blue-600 hover:text-blue-800 underline text-sm"
             >
               Click here if you're not redirected automatically
             </button>
@@ -132,7 +144,7 @@ export default function AuthCallback() {
             <div className="space-y-2">
               <button
                 onClick={handleManualRedirect}
-                className="w-full bg-azul text-white px-4 py-2 rounded hover:bg-azul-dark transition-colors"
+                className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
               >
                 Try Again
               </button>
