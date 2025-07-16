@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import ModalWrapper from "../ModalWrapper";
 
 type JobItem = {
@@ -60,21 +60,7 @@ export default function NewJobModal({
     };
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-        handleSubmit(e as any);
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, title, company]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !company.trim() || isSubmitting) return;
 
@@ -101,7 +87,21 @@ export default function NewJobModal({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [title, company, location, link, notes, isSubmitting, isEditing, onUpdate, onCreate, existingJob, onClose]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        handleSubmit(e as any);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose, handleSubmit]);
 
   const isFormValid = title.trim() && company.trim();
 

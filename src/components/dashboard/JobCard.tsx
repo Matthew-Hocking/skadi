@@ -1,13 +1,5 @@
 import React from "react";
-
-type JobItem = {
-  id: string;
-  title: string;
-  company: string;
-  status_id: string;
-  sort_order: number;
-  created_at: string;
-};
+import type { JobItem } from "../../types/job";
 
 type JobCardProps = {
   item: JobItem;
@@ -32,31 +24,40 @@ export default function JobCard({
     onDragStart(item.id);
   };
 
-  const handleDragEnd = () => {
-    onDragEnd();
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onJobClick(item);
+    }
   };
+
+  const cardClasses = `
+    bg-white border border-stone-200 rounded-lg p-4 cursor-pointer
+    transition-all duration-200 hover:shadow-md hover:border-stone-300
+    ${isDragging ? "opacity-50 rotate-2 shadow-lg" : ""}
+    ${isGhost ? "opacity-30" : ""}
+  `.trim();
 
   return (
     <div
-      data-job-card
-      draggable={!isGhost}
+      draggable
       onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      className={`bg-white border border-stone-300 rounded p-3 shadow-sm select-none transition-all duration-150 ${
-        isGhost
-          ? "opacity-30 border-dashed border-stone-400 scale-95"
-          : isDragging
-          ? "opacity-0"
-          : "cursor-grab hover:shadow-md hover:border-stone-400 hover:scale-[1.02] active:scale-95"
-      }`}
+      onDragEnd={onDragEnd}
+      onClick={() => onJobClick(item)}
+      onKeyDown={handleKeyDown}
+      className={cardClasses}
+      data-job-card
+      role="button"
+      tabIndex={0}
+      aria-label={`Job: ${item.title} at ${item.company}`}
     >
-      <h4
-        className="font-medium text-base mb-2 cursor-pointer hover:text-azul hover:underline underline-offset-2 transition-colors"
-        onClick={() => onJobClick(item)}
-      >
+      <h4 className="font-medium text-base text-stone-900 mb-1 line-clamp-2">
         {item.title}
       </h4>
-      <p className="text-sm text-gray-600">{item.company}</p>
+      <p className="text-sm text-stone-600 mb-2">{item.company}</p>
+      {item.location && (
+        <p className="text-xs text-stone-500">{item.location}</p>
+      )}
     </div>
   );
 }
