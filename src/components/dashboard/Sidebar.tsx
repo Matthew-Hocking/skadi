@@ -145,7 +145,7 @@ export default function Sidebar({ onAddNewClick }: SidebarProps) {
             size={20}
             className="rounded-full text-azul group-hover:bg-azul group-hover:text-white group-hover:p-1"
           />
-          New List
+          New Job List
         </button>
         {loading ? (
           <div className="flex flex-row gap-4">
