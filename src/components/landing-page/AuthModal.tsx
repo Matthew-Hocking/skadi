@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
-import ModalWrapper from '../ModalWrapper';
+import { useEffect, useRef, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import ModalWrapper from "../ModalWrapper";
 
 type AuthModalProps = {
-  mode: 'signin' | 'signup';
+  mode: "signin" | "signup";
   onClose: () => void;
 };
 
@@ -16,12 +16,12 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
   const MIN_PASSWORD_LENGTH = 8;
   const MAX_EMAIL_LENGTH = 254;
   const MAX_PASSWORD_LENGTH = 128;
-  
+
   const [attemptCount, setAttemptCount] = useState(0);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -32,8 +32,8 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
 
   useEffect(() => {
     return () => {
-      setPassword('');
-      setEmail('');
+      setPassword("");
+      setEmail("");
     };
   }, []);
 
@@ -44,101 +44,101 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
   };
 
   const validatePassword = (password: string) => {
-    if (mode === 'signup') {
+    if (mode === "signup") {
       if (password.length < MIN_PASSWORD_LENGTH) {
-        return 'Password must be at least 8 characters long';
+        return "Password must be at least 8 characters long";
       }
       if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-        return 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
+        return "Password must contain at least one uppercase letter, one lowercase letter, and one number";
       }
     }
     return null;
   };
 
-  const validateForm = () => {
-    const trimmedEmail = sanitizeInput(email);
-    const trimmedPassword = sanitizeInput(password);
-
-    if (!trimmedEmail) {
-      setError('Email is required');
+  const validateFormWithValues = (email: string, password: string) => {
+    if (!email) {
+      setError("Email is required");
       return false;
     }
 
-    if (trimmedEmail.length > MAX_EMAIL_LENGTH) {
-      setError('Email is too long');
-      return false;
-    }
-    
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-      setError('Please enter a valid email address');
-      return false;
-    }
-    
-    if (!trimmedPassword) {
-      setError('Password is required');
+    if (email.length > MAX_EMAIL_LENGTH) {
+      setError("Email is too long");
       return false;
     }
 
-    if (trimmedPassword.length > MAX_PASSWORD_LENGTH) {
-      setError('Password is too long');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address");
       return false;
     }
 
-    const passwordError = validatePassword(trimmedPassword);
+    if (!password) {
+      setError("Password is required");
+      return false;
+    }
+
+    if (password.length > MAX_PASSWORD_LENGTH) {
+      setError("Password is too long");
+      return false;
+    }
+
+    const passwordError = validatePassword(password);
     if (passwordError) {
       setError(passwordError);
       return false;
     }
-    
+
     return true;
   };
 
+  // Reduced real-time processing - only store raw values
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const sanitizedEmail = sanitizeInput(e.currentTarget.value);
-    setEmail(sanitizedEmail);
+    setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const sanitizedPassword = sanitizeInput(e.currentTarget.value);
-    setPassword(sanitizedPassword);
+    // Store raw value without real-time sanitization to avoid triggering Chrome's heuristics
+    setPassword(e.target.value);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if (!validateForm()) return;
+
+    // Only sanitize during form submission
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedPassword = sanitizeInput(password);
+
+    if (!validateFormWithValues(sanitizedEmail, sanitizedPassword)) return;
 
     if (attemptCount >= MAX_ATTEMPTS) {
-      setError('Too many attempts. Please try again later.');
+      setError("Too many attempts. Please try again later.");
       return;
     }
-    
-    setError('');
-    setSuccess('');
+
+    setError("");
+    setSuccess("");
     setIsLoading(true);
 
     try {
-      const fn = mode === 'signin' ? login : signup;
-      const normalizedEmail = normalizeEmail(email);
-      const trimmedPassword = sanitizeInput(password);
-      
-      const { data, error } = await fn(normalizedEmail, trimmedPassword);
+      const fn = mode === "signin" ? login : signup;
+      const normalizedEmail = normalizeEmail(sanitizedEmail);
+
+      const { data, error } = await fn(normalizedEmail, sanitizedPassword);
 
       if (error) {
-        setAttemptCount(prev => prev + 1);
+        setAttemptCount((prev) => prev + 1);
         setError(error.message);
         return;
       }
 
-      if (mode === 'signup' && !data.session) {
-        setSuccess('Confirmation email sent! Please check your inbox.');
+      if (mode === "signup" && !data.session) {
+        setSuccess("Confirmation email sent! Please check your inbox.");
       } else {
         onClose();
-        navigate('/dashboard');
+        navigate("/dashboard");
       }
     } catch (err) {
-      setAttemptCount(prev => prev + 1);
-      setError('An unexpected error occurred. Please try again.');
+      setAttemptCount((prev) => prev + 1);
+      setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -147,14 +147,25 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
   return (
     <ModalWrapper onClose={onClose}>
       <h2 id="auth-modal-title" className="text-xl font-bold mb-4">
-        {mode === 'signin' ? 'Sign In' : 'Sign Up'}
+        {mode === "signin" ? "Sign In" : "Sign Up"}
       </h2>
 
-      <form onSubmit={handleSubmit} noValidate>
+      <form
+        onSubmit={handleSubmit}
+        noValidate
+        data-form-type="auth"
+        role="form"
+        aria-labelledby="auth-modal-title"
+      >
+        <input type="hidden" name="form_type" value={mode} />
+
         <div className="mb-3">
-          <label htmlFor="email" className="sr-only">Email address</label>
+          <label htmlFor="email" className="block text-sm font-medium mb-1">
+            Email address
+          </label>
           <input
             id="email"
+            name="email"
             type="email"
             ref={inputRef}
             placeholder="Email"
@@ -168,32 +179,46 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
             aria-describedby={error ? "error-message" : undefined}
           />
         </div>
-        
+
         <div className="mb-4">
-          <label htmlFor="password" className="sr-only">Password</label>
+          <label htmlFor="password" className="block text-sm font-medium mb-1">
+            Password
+          </label>
           <input
             id="password"
+            name="password"
             type="password"
             placeholder={mode === "signup" ? "Create a Password" : "Password"}
             value={password}
             onChange={handlePasswordChange}
             className="block w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-azul"
             required
-            minLength={mode === 'signup' ? MIN_PASSWORD_LENGTH : undefined}
+            minLength={mode === "signup" ? MIN_PASSWORD_LENGTH : undefined}
             maxLength={MAX_PASSWORD_LENGTH}
             disabled={isLoading || attemptCount >= MAX_ATTEMPTS}
-            autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+            autoComplete={
+              mode === "signup" ? "new-password" : "current-password"
+            }
             aria-describedby={error ? "error-message" : undefined}
           />
         </div>
 
         {error && (
-          <p id="error-message" className="text-red-600 text-sm mb-3" role="alert" aria-live="polite">
+          <p
+            id="error-message"
+            className="text-red-600 text-sm mb-3"
+            role="alert"
+            aria-live="polite"
+          >
             {error}
           </p>
         )}
         {success && (
-          <p className="text-green-600 text-sm mb-3" role="status" aria-live="polite">
+          <p
+            className="text-green-600 text-sm mb-3"
+            role="status"
+            aria-live="polite"
+          >
             {success}
           </p>
         )}
@@ -205,9 +230,9 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
         )}
 
         <div className="flex justify-between">
-          <button 
-            type="button" 
-            onClick={onClose} 
+          <button
+            type="button"
+            onClick={onClose}
             className="text-sm"
             disabled={isLoading}
           >
@@ -218,7 +243,11 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
             className="bg-azul text-white px-4 py-2 rounded disabled:opacity-50"
             disabled={isLoading || attemptCount >= MAX_ATTEMPTS}
           >
-            {isLoading ? 'Loading...' : (mode === 'signin' ? 'Sign In' : 'Sign Up')}
+            {isLoading
+              ? "Loading..."
+              : mode === "signin"
+              ? "Sign In"
+              : "Sign Up"}
           </button>
         </div>
       </form>
