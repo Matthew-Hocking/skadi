@@ -90,20 +90,17 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
     return true;
   };
 
-  // Reduced real-time processing - only store raw values
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Store raw value without real-time sanitization to avoid triggering Chrome's heuristics
     setPassword(e.target.value);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Only sanitize during form submission
     const sanitizedEmail = sanitizeInput(email);
     const sanitizedPassword = sanitizeInput(password);
 
