@@ -21,6 +21,7 @@ type JobColumnProps = {
       notes?: string;
     }
   ) => void;
+  onDeleteJob: (jobId: string) => void;
 };
 
 const JobColumn = memo(
@@ -32,6 +33,7 @@ const JobColumn = memo(
     onDrop,
     draggedItem,
     onUpdateJob,
+    onDeleteJob,
   }: JobColumnProps) {
     const [isDragOver, setIsDragOver] = useState(false);
     const [dropIndex, setDropIndex] = useState<number | null>(null);
@@ -212,6 +214,7 @@ const JobColumn = memo(
             onClose={handleCloseModal}
             job={selectedJob}
             onEdit={handleEditJob}
+            onDelete={onDeleteJob}
           />
         )}
 

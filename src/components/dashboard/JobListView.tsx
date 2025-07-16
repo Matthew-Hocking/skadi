@@ -215,6 +215,21 @@ export default function JobListView({ listId }: JobListViewProps) {
     );
   };
 
+  const handleDeleteJob = async (jobId: string) => {
+    setJobItems((prev) => prev.filter((job) => job.id !== jobId));
+
+    const { error } = await supabase
+      .from("job_item")
+      .delete()
+      .eq("id", jobId);
+
+    if (error) {
+      console.error("Error deleting job:", error.message);
+      fetchData(listId);
+      return;
+    }
+  }
+
   const handleDragStart = (itemId: string) => {
     setDraggedItem(itemId);
   };
@@ -314,6 +329,7 @@ export default function JobListView({ listId }: JobListViewProps) {
                 onDrop={handleDrop}
                 draggedItem={draggedItem}
                 onUpdateJob={handleUpdateJob}
+                onDeleteJob={handleDeleteJob}
               />
             );
           })}
