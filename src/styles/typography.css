@@ -1,13 +1,4 @@
-@theme {
-  --font-logotype: "Grenze Gotisch", serif;
-  --font-ui: "Inter", sans-serif;
-}
-
 @layer base {
-  html {
-    font-family: var(--font-ui);
-  }
-
   h1,
   h2,
   h3,

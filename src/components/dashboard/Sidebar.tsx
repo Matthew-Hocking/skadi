@@ -134,7 +134,7 @@ export default function Sidebar({ onAddNewClick }: SidebarProps) {
       role="complementary"
       aria-label="Job lists sidebar"
     >
-      <div className="py-4 px-7 text-5xl grenze-gotisch-display">Skadi</div>
+      <div className="py-4 px-7 text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Skadi</div>
 
       <nav className="flex-1 overflow-y-auto p-4">
         <button
