@@ -28,11 +28,15 @@ export function useAuth() {
   }, []);
 
   const signInWithProvider = async (provider: string) => {
+    const redirectTo = import.meta.env.PROD 
+      ? `https://skadi-two.vercel.app/auth/callback`
+      : `${window.location.origin}/auth/callback`;
+
     return supabase.auth.signInWithOAuth({
       provider: provider as Provider,
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+        redirectTo
+      }
     });
   };
 
