@@ -299,7 +299,7 @@ export default function JobListView({ listId }: JobListViewProps) {
           <h1 className="text-xl mb-0 font-semibold">{list?.title}</h1>
         )}
         <button
-          className="flex gap-1 bg-azul text-white px-3 py-2 rounded text-sm leading-tight"
+          className="flex gap-1 bg-indigo-600 text-white px-3 py-2 rounded text-sm leading-tight"
           onClick={() => setShowModal(true)}
         >
           <Plus size={18}/> New Job

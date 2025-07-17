@@ -128,7 +128,7 @@ const JobColumn = memo(
     const columnClasses = `
     flex flex-col border-r border-stone-200 h-full bg-stone-50 
     relative overflow-y-auto transition-colors
-    ${isDragOver ? "bg-blue-50 border-blue-300" : ""}
+    ${isDragOver ? "bg-indigo-50 border-indigo-300" : ""}
   `.trim();
 
     return (
@@ -166,7 +166,7 @@ const JobColumn = memo(
               <div key={item.id}>
                 {isDragOver && dropIndex === index && (
                   <div
-                    className="h-1 bg-blue-400 rounded-full mx-2 mb-2 transition-all duration-200"
+                    className="h-1 bg-indigo-400 rounded-full mx-2 mb-2 transition-all duration-200"
                     role="presentation"
                     aria-hidden="true"
                   />
@@ -196,7 +196,7 @@ const JobColumn = memo(
 
           {isDragOver && dropIndex === items.length && (
             <div
-              className="h-1 bg-blue-400 rounded-full mx-2 transition-all duration-200"
+              className="h-1 bg-indigo-600 rounded-full mx-2 transition-all duration-200"
               role="presentation"
               aria-hidden="true"
             />

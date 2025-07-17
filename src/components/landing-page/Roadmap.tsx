@@ -1,4 +1,4 @@
-import { Briefcase, Check, Target, Users } from "lucide-react";
+import { BetweenVerticalStart, Briefcase, Check, List, Target, Users } from "lucide-react";
 
 const Roadmap = () => {
   return (
@@ -49,7 +49,7 @@ const Roadmap = () => {
               </li>
               <li className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>Basic notes and deadline tracking</span>
+                <span>Basic notes</span>
               </li>
             </ul>
           </div>
@@ -70,42 +70,42 @@ const Roadmap = () => {
             <ul className="space-y-3 text-gray-600">
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 mt-0.5 flex-shrink-0"></div>
-                <span>Email integration and auto-tracking</span>
+                <span>Search and filtering</span>
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 mt-0.5 flex-shrink-0"></div>
-                <span>Calendar integration for interviews</span>
+                <span>Richer details and deadline tracking</span>
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 mt-0.5 flex-shrink-0"></div>
-                <span>Document storage and templates</span>
+                <span>Customisable Kanban</span>
               </li>
               <li className="flex items-start gap-3">
                 <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 mt-0.5 flex-shrink-0"></div>
-                <span>Analytics and application insights</span>
+                <span>Alternative list view and more...</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        {/* <div className="grid md:grid-cols-3 gap-6">
           <div className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300">
             <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white mx-auto mb-4">
-              <Users className="w-6 h-6" />
+              <BetweenVerticalStart className="w-6 h-6" />
             </div>
             <h4 className="font-semibold text-gray-900 mb-2">Phase 3</h4>
             <p className="text-sm text-gray-600">
-              Networking features and contact management
+              Customisable Kanban Columns
             </p>
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300">
             <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 flex items-center justify-center text-white mx-auto mb-4">
-              <Target className="w-6 h-6" />
+              <List className="w-6 h-6" />
             </div>
             <h4 className="font-semibold text-gray-900 mb-2">Phase 4</h4>
             <p className="text-sm text-gray-600">
-              AI-powered job matching and recommendations
+              Alternate List View
             </p>
           </div>
 
@@ -115,10 +115,10 @@ const Roadmap = () => {
             </div>
             <h4 className="font-semibold text-gray-900 mb-2">Phase 5</h4>
             <p className="text-sm text-gray-600">
-              Career coaching and interview preparation tools
+              
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

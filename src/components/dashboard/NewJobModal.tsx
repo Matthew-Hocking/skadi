@@ -122,7 +122,7 @@ export default function NewJobModal({
               ref={inputRef}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full border-b border-stone-200 p-1 focus:border-azul focus:outline-none transition-colors"
+              className="w-full border-b border-stone-200 p-1 focus:border-indigo-600 focus:outline-none transition-colors"
               required
               maxLength={100}
               aria-describedby="title-error"
@@ -138,7 +138,7 @@ export default function NewJobModal({
               type="text"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              className="w-full border-b border-stone-200 p-1 focus:border-azul focus:outline-none transition-colors"
+              className="w-full border-b border-stone-200 p-1 focus:border-indigo-600 focus:outline-none transition-colors"
               required
               maxLength={100}
               aria-describedby="company-error"
@@ -157,7 +157,7 @@ export default function NewJobModal({
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="w-full border-b border-stone-200 p-1 focus:border-azul focus:outline-none transition-colors"
+              className="w-full border-b border-stone-200 p-1 focus:border-indigo-600 focus:outline-none transition-colors"
               maxLength={100}
               placeholder="e.g., San Francisco, Remote, New York"
             />
@@ -172,7 +172,7 @@ export default function NewJobModal({
               type="url"
               value={link}
               onChange={(e) => setLink(e.target.value)}
-              className="w-full border-b border-stone-200 p-1 focus:border-azul focus:outline-none transition-colors"
+              className="w-full border-b border-stone-200 p-1 focus:border-indigo-600 focus:outline-none transition-colors"
               placeholder="https://..."
               aria-describedby="link-help"
             />
@@ -190,7 +190,7 @@ export default function NewJobModal({
             id="notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full border border-stone-200 rounded p-3 resize-vertical focus:border-azul focus:outline-none transition-colors"
+            className="w-full border border-stone-200 rounded p-3 resize-vertical focus:border-indigo-600 focus:outline-none transition-colors"
             rows={4}
             maxLength={1000}
             placeholder="Add any notes about this job, interview details, salary info, etc..."
@@ -212,7 +212,7 @@ export default function NewJobModal({
           <button
             type="submit"
             disabled={!isFormValid || isSubmitting}
-            className="bg-azul text-white px-4 py-2 rounded hover:bg-azul-dark disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
             {isSubmitting 
               ? (isEditing ? "Updating..." : "Creating...") 

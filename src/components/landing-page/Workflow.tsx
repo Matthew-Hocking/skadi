@@ -1,7 +1,7 @@
 const Workflow = () => {
   const workflowStages = [
     {
-      name: "Saved",
+      name: "Watchlist",
       description: "Bookmark interesting opportunities",
       gradient: "from-gray-500 to-gray-600",
     },
@@ -30,7 +30,7 @@ const Workflow = () => {
             Your Job Hunt Journey
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Visualize every step of your application process with our intuitive
+            Visualise every step of your application process with our intuitive
             kanban board
           </p>
         </div>

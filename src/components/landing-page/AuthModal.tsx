@@ -112,7 +112,7 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
                 font-medium transition-colors duration-200
                 ${provider.color} ${provider.hoverColor}
                 disabled:opacity-50 disabled:cursor-not-allowed
-                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
               `}
               aria-label={`${mode === "signin" ? "Sign in" : "Sign up"} with ${
                 provider.name
@@ -147,7 +147,7 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
           <button
             type="button"
             onClick={onClose}
-            className="text-sm text-gray-600 hover:text-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1"
+            className="text-sm text-gray-600 hover:text-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 rounded px-2 py-1"
             disabled={isLoading}
           >
             Cancel
@@ -158,7 +158,7 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
           By continuing, you agree to our{" "}
           <a
             href="/terms"
-            className="text-blue-600 hover:text-blue-800 underline"
+            className="text-indigo-600 hover:text-indigo-800 underline"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -167,7 +167,7 @@ export default function AuthModal({ mode, onClose }: AuthModalProps) {
           and{" "}
           <a
             href="/privacy"
-            className="text-blue-600 hover:text-blue-800 underline"
+            className="text-indigo-600 hover:text-indigo-800 underline"
             target="_blank"
             rel="noopener noreferrer"
           >

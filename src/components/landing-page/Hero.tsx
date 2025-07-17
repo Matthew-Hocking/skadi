@@ -22,11 +22,11 @@ const Hero = ({ onSignUpClick }: HeroProps) => {
         </h1>
 
         <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto">
-          The Norse goddess of hunting guides your job search
+          The Jötunn goddess of hunting guides your job search
         </p>
 
         <p className="text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
-          Track applications across multiple industries with precision. From
+          Track applications with precision. From
           saved opportunities to job offers, manage your career hunt like a
           warrior.
         </p>

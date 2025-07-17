@@ -5,7 +5,7 @@
 
   .underline-hover::after {
     content: '';
-    @apply absolute left-0 bottom-0 h-[4px] w-full bg-azul;
+    @apply absolute left-0 bottom-0 h-[4px] w-full bg-indigo-600;
 
     transform: scaleX(0);
     transform-origin: right;

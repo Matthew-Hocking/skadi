@@ -4,23 +4,23 @@ const Features = () => {
   const features = [
     {
       icon: <Layout className="w-8 h-8" />,
-      title: "Multi-Industry Tracking",
+      title: "Diverse Tracking",
       description:
-        "Create separate lists for different industries - hospitality, web development, marketing, and more. Keep your job hunts organized and focused.",
+        "Applying across industries, or categorising your entries? Keep your job hunts organised and focused.",
       gradient: "from-blue-500 to-cyan-500",
     },
     {
       icon: <Briefcase className="w-8 h-8" />,
       title: "Detailed Job Cards",
       description:
-        "Store all job details in one place - company info, requirements, contacts, notes, and deadlines. Never lose track of important information.",
+        "Store all job details in one place. Never lose track of important information.",
       gradient: "from-purple-500 to-pink-500",
     },
     {
       icon: <Target className="w-8 h-8" />,
       title: "Kanban Workflow",
       description:
-        "Visualize your job application journey from 'Saved' to 'Applied' to 'Interviewing' to 'Offered'. Track your progress at a glance.",
+        "Visualise your job application journey. Track your progress at a glance.",
       gradient: "from-indigo-500 to-purple-500",
     },
   ];
@@ -33,8 +33,8 @@ const Features = () => {
             Master Your Job Hunt
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Skadi provides the tools and organization you need to track
-            opportunities across industries and land your dream job.
+            Skadi provides the tools and organisation you need to track
+            opportunities across categories and land your dream job.
           </p>
         </div>
 
