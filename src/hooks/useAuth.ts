@@ -1,6 +1,6 @@
-import type { User } from '@supabase/supabase-js';
-import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import type { User, Provider } from "@supabase/supabase-js";
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -13,9 +13,12 @@ export function useAuth() {
       setLoading(false);
     };
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+        setLoading(false);
+      }
+    );
 
     getSession();
 
@@ -24,18 +27,31 @@ export function useAuth() {
     };
   }, []);
 
-  const login = async (email: string, password: string) => {
-    return supabase.auth.signInWithPassword({ email, password });
-  };
+  const signInWithProvider = async (provider: string) => {
+    const redirectTo = import.meta.env.PROD 
+      ? `https://skadi-two.vercel.app/auth/callback`
+      : `${window.location.origin}/auth/callback`;
 
-  const signup = async (email: string, password: string) => {
-    return supabase.auth.signUp({ email, password });
+    return supabase.auth.signInWithOAuth({
+      provider: provider as Provider,
+      options: {
+        redirectTo
+      }
+    });
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      setUser(null);
+    }
+    return { error };
   };
 
-  return { user, login, signup, logout, loading };
+  return {
+    user,
+    signInWithProvider,
+    logout,
+    loading,
+  };
 }

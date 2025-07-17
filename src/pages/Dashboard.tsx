@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../hooks/useAuth";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { Sidebar, AddListModal, JobListView } from "../components/dashboard";
 
-function Dashboard() {
+export default function Dashboard() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [refreshAfterCreate, setRefreshAfterCreate] = useState<() => void>(
     () => () => {}
@@ -37,18 +36,4 @@ function Dashboard() {
       )}
     </div>
   );
-}
-
-export default function ProtectedDashboard() {
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!loading && !user) navigate("/");
-  }, [user, loading]);
-
-  if (loading) return <div>Loading...</div>;
-  if (!user) return null;
-
-  return <Dashboard />;
 }
