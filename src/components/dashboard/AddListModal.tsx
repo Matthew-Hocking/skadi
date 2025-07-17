@@ -76,7 +76,7 @@ export default function AddListModal({
           </button>
           <button
             type="submit"
-            className="text-sm bg-azul text-white px-4 py-2 rounded hover:bg-azul/90"
+            className="text-sm bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-600/90"
             disabled={saving}
           >
             {saving ? "Saving..." : "Create"}

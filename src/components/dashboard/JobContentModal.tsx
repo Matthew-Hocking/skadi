@@ -49,7 +49,7 @@ export default function JobContentModal({
                 href={job.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-azul hover:text-azul-dark transition-colors cursor-pointer"
+                className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700 transition-colors cursor-pointer"
               >
                 {job.title}
                 <ExternalLink size={20} />
@@ -122,7 +122,7 @@ export default function JobContentModal({
             </button>
             <button
               onClick={() => onEdit(job)}
-              className="bg-azul text-white px-4 py-2 rounded hover:bg-azul-dark transition-colors"
+              className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition-colors"
             >
               Edit Job
             </button>

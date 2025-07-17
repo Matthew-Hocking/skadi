@@ -109,7 +109,7 @@ export default function Sidebar({ onAddNewClick }: SidebarProps) {
           aria-label={`Select job list: ${list.title}`}
           className={`flex-1 text-left text-sm py-2 px-3 ${
             listId === list.id
-              ? "text-azul rounded font-semibold bg-gray-100"
+              ? "text-indigo-600 rounded font-semibold bg-gray-100"
               : ""
           }`}
         >
@@ -134,16 +134,16 @@ export default function Sidebar({ onAddNewClick }: SidebarProps) {
       role="complementary"
       aria-label="Job lists sidebar"
     >
-      <div className="py-4 px-7 text-5xl grenze-gotisch-display">Skadi</div>
+      <div className="py-4 px-7 text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Skadi</div>
 
       <nav className="flex-1 overflow-y-auto p-4">
         <button
           onClick={() => onAddNewClick(() => setRefreshKey((k) => k + 1))}
-          className="group flex items-center gap-2 w-full mb-4 px-3 py-2 rounded hover:text-azul hover:bg-azul/10"
+          className="group flex items-center gap-2 w-full mb-4 px-3 py-2 rounded hover:text-indigo-600 hover:bg-indigo-600/10"
         >
           <Plus
             size={20}
-            className="rounded-full text-azul group-hover:bg-azul group-hover:text-white group-hover:p-1"
+            className="rounded-full text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white group-hover:p-1"
           />
           New Job List
         </button>

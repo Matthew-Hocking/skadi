@@ -78,7 +78,7 @@ export default function AuthCallback() {
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 text-center">
         {status === "loading" && (
           <>
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mx-auto mb-4"></div>
             <h2 className="text-xl font-semibold text-gray-900 mb-2">
               Completing Authentication
             </h2>
@@ -111,7 +111,7 @@ export default function AuthCallback() {
             </p>
             <button
               onClick={handleManualRedirect}
-              className="text-blue-600 hover:text-blue-800 underline text-sm"
+              className="text-indigo-600 hover:text-indigo-800 underline text-sm"
             >
               Click here if you're not redirected automatically
             </button>
@@ -144,7 +144,7 @@ export default function AuthCallback() {
             <div className="space-y-2">
               <button
                 onClick={handleManualRedirect}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                className="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition-colors"
               >
                 Try Again
               </button>
