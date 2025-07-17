@@ -26,9 +26,8 @@ const Hero = ({ onSignUpClick }: HeroProps) => {
         </p>
 
         <p className="text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
-          Track applications with precision. From
-          saved opportunities to job offers, manage your career hunt like a
-          warrior.
+          Track applications with precision. From saved opportunities to job
+          offers, manage your career hunt like a warrior.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

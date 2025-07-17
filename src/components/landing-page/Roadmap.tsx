@@ -1,4 +1,4 @@
-import { BetweenVerticalStart, Briefcase, Check, List, Target, Users } from "lucide-react";
+import { Check, Target } from "lucide-react";
 
 const Roadmap = () => {
   return (

@@ -1,5 +1,3 @@
-import { Target } from "lucide-react";
-
 type NavProps = {
   onSignInClick: () => void;
   onSignUpClick: () => void;
