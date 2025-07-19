@@ -123,7 +123,8 @@ export default function ModalWrapper({
           ref={modalRef}
           className={`
             bg-white shadow-lg
-            p-4 sm:p-6
+            px-4 py-8
+            sm:py-6 md:py-4
             max-h-[100dvh]
             overflow-y-auto
             md:rounded-lg

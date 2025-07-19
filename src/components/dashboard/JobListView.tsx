@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import NewJobModal from "./NewJobModal";
 import JobColumn from "./JobColumn";
-import { Loader, Plus } from "lucide-react";
-
-type JobList = {
-  id: string;
-  title: string;
-  created_at: string;
-};
+import { Loader } from "lucide-react";
 
 type JobItem = {
   id: string;
@@ -31,14 +25,18 @@ type JobStatus = {
 
 type JobListViewProps = {
   listId: string;
+  showNewJobModal: boolean;
+  setShowNewJobModal: (show: boolean) => void;
 };
 
-export default function JobListView({ listId }: JobListViewProps) {
-  const [list, setList] = useState<JobList | null>(null);
+export default function JobListView({ 
+  listId, 
+  showNewJobModal, 
+  setShowNewJobModal 
+}: JobListViewProps) {
   const [jobItems, setJobItems] = useState<JobItem[]>([]);
   const [jobStatuses, setJobStatuses] = useState<JobStatus[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
 
   useEffect(() => {
@@ -49,8 +47,7 @@ export default function JobListView({ listId }: JobListViewProps) {
   const fetchData = async (listId: string) => {
     setLoading(true);
 
-    const [listRes, itemsRes, statusesRes] = await Promise.all([
-      supabase.from("job_list").select("*").eq("id", listId),
+    const [itemsRes, statusesRes] = await Promise.all([
       supabase
         .from("job_item")
         .select("*")
@@ -62,10 +59,6 @@ export default function JobListView({ listId }: JobListViewProps) {
         .eq("job_list_id", listId)
         .order("order", { ascending: true }),
     ]);
-
-    if (listRes.error)
-      console.error("Error fetching job list:", listRes.error.message);
-    else setList(listRes.data?.[0] ?? null);
 
     if (itemsRes.error)
       console.error("Error fetching job items:", itemsRes.error.message);
@@ -285,30 +278,22 @@ export default function JobListView({ listId }: JobListViewProps) {
     setDraggedItem(null);
   };
 
-  if (!loading && !list) return <p className="text-red-600">Job list not found.</p>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="flex flex-row gap-4">
+          <Loader className="animate-spin text-stone-500"/>
+          <p className="animate-pulse text-stone-500 m-0 leading-snug">Loading jobs...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="flex justify-between items-center p-4 border-b-2 border-stone-200 bg-white sticky top-0 z-20">
-        {loading ? (
-          <div className="flex flex-row gap-4">
-            <Loader className="animate-spin text-stone-500"/>
-            <p className="animate-pulse text-stone-500 m-0 leading-snug">Loading...</p>
-          </div>
-        ) : (
-          <h1 className="text-xl mb-0 font-semibold">{list?.title}</h1>
-        )}
-        <button
-          className="flex gap-1 bg-indigo-600 text-white px-3 py-2 rounded text-sm leading-tight"
-          onClick={() => setShowModal(true)}
-        >
-          <Plus size={18}/> New Job
-        </button>
-      </div>
-
-      {showModal && (
+    <div className="h-full flex flex-col">
+      {showNewJobModal && (
         <NewJobModal
-          onClose={() => setShowModal(false)}
+          onClose={() => setShowNewJobModal(false)}
           onCreate={handleCreateJob}
         />
       )}
