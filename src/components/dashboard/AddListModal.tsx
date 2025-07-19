@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import ModalWrapper from "../ModalWrapper";
 
-
 type AddListModalProps = {
   onClose: () => void;
   onCreated: () => void;

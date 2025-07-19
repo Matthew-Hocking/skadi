@@ -1,14 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import ModalWrapper from "../ModalWrapper";
-
-type JobItem = {
-  id: string;
-  title: string;
-  company: string;
-  status_id: string;
-  sort_order: number;
-  created_at: string;
-};
+import type { JobItem } from "../../types/job";
 
 type NewJobModalProps = {
   onClose: () => void;

@@ -3,12 +3,7 @@ import { useParams } from "react-router-dom";
 import { Plus, Loader, Menu, X } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { Sidebar, AddListModal, JobListView } from "../components/dashboard";
-
-type JobList = {
-  id: string;
-  title: string;
-  created_at: string;
-};
+import type { JobList } from "../types/job";
 
 export default function Dashboard() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -86,7 +81,7 @@ export default function Dashboard() {
                 </p>
               </div>
             ) : currentList ? (
-              <h1 className="text-xl mb-0 font-semibold">
+              <h1 className="text-xl mb-0 font-semibold text-nowrap">
                 {currentList.title}
               </h1>
             ) : null}
@@ -94,7 +89,7 @@ export default function Dashboard() {
 
           {listId && (
             <button
-              className="flex items-center gap-1 bg-indigo-600 text-white px-3 py-2 rounded text-sm leading-tight"
+              className="flex items-center gap-1 bg-indigo-600 text-white px-3 py-2 rounded text-sm leading-tight text-nowrap"
               onClick={handleNewJobClick}
             >
               <Plus size={18} /> New Job

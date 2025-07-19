@@ -3,25 +3,7 @@ import { supabase } from "../../lib/supabase";
 import NewJobModal from "./NewJobModal";
 import JobColumn from "./JobColumn";
 import { Loader } from "lucide-react";
-
-type JobItem = {
-  id: string;
-  title: string;
-  company: string;
-  location?: string;
-  link?: string;
-  notes?: string;
-  status_id: string;
-  sort_order: number;
-  created_at: string;
-};
-
-type JobStatus = {
-  id: string;
-  title: string;
-  order: number;
-  created_at: string;
-};
+import type { JobItem, JobStatus } from "../../types/job";
 
 type JobListViewProps = {
   listId: string;
