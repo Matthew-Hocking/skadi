@@ -262,7 +262,7 @@ export default function JobListView({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-full bg-stone-50">
         <div className="flex flex-row gap-4">
           <Loader className="animate-spin text-stone-500"/>
           <p className="animate-pulse text-stone-500 m-0 leading-snug">Loading jobs...</p>

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
-import { Ellipsis, Loader, LogOut, Plus } from "lucide-react";
+import { Ellipsis, Loader, LogOut, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import type { JobList } from "../../types/job";
 
@@ -14,6 +14,7 @@ export default function Sidebar({ onAddNewClick, collapsed }: SidebarProps) {
   const [lists, setLists] = useState<JobList[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [openPopover, setOpenPopover] = useState<string | null>(null);
 
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -56,6 +57,39 @@ export default function Sidebar({ onAddNewClick, collapsed }: SidebarProps) {
     }
   }, [loading, listId, lists, navigate]);
 
+  useEffect(() => {
+    if (!openPopover) return;
+
+    const handleInteraction = (event: Event) => {
+      if (event.type === 'mousedown') {
+        const target = event.target as Element;
+        if (!target.closest('[data-popover]')) {
+          setOpenPopover(null);
+        }
+      } else if (event.type === 'keydown') {
+        const keyEvent = event as KeyboardEvent;
+        if (keyEvent.key === 'Escape') {
+          setOpenPopover(null);
+        }
+      } else if (event.type === 'focusin') {
+        const target = event.target as Element;
+        if (!target.closest('[data-popover]')) {
+          setOpenPopover(null);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleInteraction);
+    document.addEventListener('keydown', handleInteraction);
+    document.addEventListener('focusin', handleInteraction);
+
+    return () => {
+      document.removeEventListener('mousedown', handleInteraction);
+      document.removeEventListener('keydown', handleInteraction);
+      document.removeEventListener('focusin', handleInteraction);
+    };
+  }, [openPopover]);
+
   const handleLogout = async () => {
     await logout();
     navigate("/");
@@ -88,6 +122,12 @@ export default function Sidebar({ onAddNewClick, collapsed }: SidebarProps) {
         }
       }
     }
+    
+    setOpenPopover(null);
+  };
+
+  const togglePopover = (listId: string) => {
+    setOpenPopover(openPopover === listId ? null : listId);
   };
 
   const renderedListItems = useMemo(() => {
@@ -95,7 +135,7 @@ export default function Sidebar({ onAddNewClick, collapsed }: SidebarProps) {
       <li
         key={list.id}
         role="option"
-        className={`flex items-center justify-between group rounded hover:bg-gray-100 ${
+        className={`relative flex items-center justify-between group rounded hover:bg-gray-100 ${
           listId === list.id ? "bg-gray-100" : ""
         }`}
       >
@@ -119,18 +159,32 @@ export default function Sidebar({ onAddNewClick, collapsed }: SidebarProps) {
         </button>
 
         {!collapsed && (
-          <button
-            onClick={() => handleDeleteList(list)}
-            className="text-gray-700 hover:text-indigo-600 hover:bg-indigo-600/10 px-3 py-2 opacity-0 group-hover:opacity-100 focus:opacity-100"
-            aria-label={`Delete list: ${list.title}`}
-            title={`Delete "${list.title}"`}
-          >
-            <Ellipsis size={18} />
-          </button>
+          <div className="relative" data-popover>
+            <button
+              onClick={() => togglePopover(list.id)}
+              className="rounded text-gray-700 hover:text-indigo-600 hover:bg-indigo-600/10 px-3 py-2 opacity-0 group-hover:opacity-100 focus:opacity-100"
+              aria-label={`More options for list: ${list.title}`}
+              title="More options"
+            >
+              <Ellipsis size={18} />
+            </button>
+
+            {openPopover === list.id && (
+              <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 min-w-[140px]">
+                <button
+                  onClick={() => handleDeleteList(list)}
+                  className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  <Trash2 size={16} />
+                  Delete list
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </li>
     ));
-  }, [lists, listId, collapsed]);
+  }, [lists, listId, collapsed, openPopover]);
 
   return (
     <aside
