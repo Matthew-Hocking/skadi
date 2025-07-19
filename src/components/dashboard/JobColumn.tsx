@@ -196,7 +196,7 @@ const JobColumn = memo(
 
           {isDragOver && dropIndex === items.length && (
             <div
-              className="h-1 bg-indigo-600 rounded-full mx-2 transition-all duration-200"
+              className="h-1 bg-indigo-300 rounded-full mx-2 transition-all duration-200"
               role="presentation"
               aria-hidden="true"
             />
